@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "prismjs": "^1.30.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.6.0",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^19.1.16",

@@ -1,0 +1,15 @@
+version: "1"
+language: typescript
+algorithm: bubble-sort
+
+steps:
+  - lineStart: 1
+    note: Function signature
+
+  - lineStart: 2
+    lineEnd: 12
+    note: Outer and inner loops
+
+  - lineStart: 6
+    lineEnd: 10
+    note: Comparison and swap

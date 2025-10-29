@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { Step } from "@types";
+import type { StepSequence } from "@types";
 
 type Options = {
-  steps: Step[];
+  steps: StepSequence;
   initialIndex?: number; // start at which step
   initialSpeedMs?: number; // delay between steps when playing
 };

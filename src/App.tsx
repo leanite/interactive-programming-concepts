@@ -1,18 +1,21 @@
-import React from "react";
+import TopBar from "./components/TopBar";
+import Controls from "./components/Controls";
+import Canvas from "./components/Canvas";
+import CodePanel from "./components/CodePanel";
 
 export default function App() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold">Interactive Programming Concepts</h1>
-      <p className="text-neutral-300">
-        Tailwind configurado. Vamos começar a montar o layout nos próximos commits.
-      </p>
+    <div className="min-h-screen">
+      <TopBar />
 
-      <div className="mt-4 rounded-xl border border-neutral-700 p-4">
-        <button className="rounded-lg bg-blue-500/90 px-3 py-1.5 hover:bg-blue-500">
-          Botão de teste
-        </button>
-      </div>
+      <main className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-4 p-4 sm:p-6">
+        <section className="space-y-4">
+          <Controls />
+          <Canvas />
+        </section>
+
+        <CodePanel />
+      </main>
     </div>
   );
 }

@@ -22,6 +22,11 @@ export function useStepRunner({ steps, initialIndex = 0, initialSpeedMs = 700 }:
     setIndex((i) => (i < steps.length - 1 ? i + 1 : i));
   }, [steps.length]);
 
+  // Move backward one step if possible
+  const back = useCallback(() => {
+    setIndex((i) => (i > 0 ? i - 1 : 0));
+  }, []);
+
   // Reset to the beginning and pause
   const reset = useCallback(() => {
     setIsPlaying(false);
@@ -81,6 +86,7 @@ export function useStepRunner({ steps, initialIndex = 0, initialSpeedMs = 700 }:
     speedMs,
     setSpeedMs,
     step,
+    back,
     reset,
     togglePlay,
     setIndex, // exposed for direct navigation if needed later

@@ -4,7 +4,11 @@ algorithm: bubble-sort
 
 steps:
   - lineStart: 1
-    note: Function signature
+    note: |
+      This function initializes the sorting process.
+      It defines the signature and sets up the main parameters.
+
+      Notice how the algorithm uses an in-place strategy.
 
   - lineStart: 2
     lineEnd: 12

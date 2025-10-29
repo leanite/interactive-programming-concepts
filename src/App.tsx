@@ -101,6 +101,7 @@ export default function App() {
             isPlaying={runner.isPlaying}
             onPlayPause={runner.togglePlay}
             onStep={runner.step}
+            onBack={runner.back} 
             onReset={runner.reset}
             speedMs={runner.speedMs}
             onSpeedChange={runner.setSpeedMs}
@@ -111,7 +112,7 @@ export default function App() {
             total={steps.length}
             note={runner.current?.note ?? null}
           />
-          
+
           <Canvas />
         </section>
 

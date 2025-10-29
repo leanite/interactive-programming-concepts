@@ -2,6 +2,7 @@ type Props = {
   isPlaying: boolean;
   onPlayPause: () => void;
   onStep: () => void;
+  onBack: () => void;
   onReset: () => void;
   speedMs: number;
   onSpeedChange: (ms: number) => void;
@@ -11,6 +12,7 @@ export default function Controls({
   isPlaying,
   onPlayPause,
   onStep,
+  onBack,
   onReset,
   speedMs,
   onSpeedChange,
@@ -27,6 +29,16 @@ export default function Controls({
           onClick={onReset}
         >
           Reset
+        </button>
+
+        {/* Prev */}
+        <button
+            className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+            onClick={onBack}
+            disabled={isPlaying}
+            title={isPlaying ? "Pause to navigate manually" : "Go back one step"}
+          >
+          Prev
         </button>
 
         {/* Play / Pause */}

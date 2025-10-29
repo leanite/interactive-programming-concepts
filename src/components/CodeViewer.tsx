@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import Prism from "prismjs";
 
+// Base dependency for C/Java languages
+import "prismjs/components/prism-clike";
+
 // Import languages supported
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-python";
@@ -11,7 +14,7 @@ import "prismjs/components/prism-rust";
 // Theme
 import "prismjs/themes/prism-tomorrow.css";
 
-type Language = "typescript" | "python" | "java" | "c" | "rust";
+import type { Language } from "../types/language"; // <-- shared type
 
 type Props = {
   language: Language;
@@ -21,10 +24,10 @@ type Props = {
 
 export default function CodeViewer({ language, code, highlight }: Props) {
   // Precompute grammar; fallback to TS if missing
-  const grammar = useMemo(
-    () => Prism.languages[language] || Prism.languages.typescript,
-    [language]
-  );
+  const grammar = useMemo(() => {
+    // Guard: ensure grammar exists (e.g., if a language import changes)
+    return Prism.languages[language] ?? Prism.languages.typescript;
+  }, [language]);
 
   // Split code into individual lines to render gutters + per-line highlight
   const lines = useMemo(() => code.split("\n"), [code]);
@@ -52,7 +55,7 @@ export default function CodeViewer({ language, code, highlight }: Props) {
                   active ? "bg-cyan-500/10" : ""
                 }`}
               >
-                {/* Gutter: line number column */}
+                {/* Gutter: line number column (decorative) */}
                 <div
                   className="select-none text-right w-10 shrink-0 pl-3 pr-1 text-neutral-500"
                   aria-hidden="true"

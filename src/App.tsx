@@ -2,6 +2,7 @@ import yaml from "js-yaml";
 import { useState, useEffect } from "react";
 import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
+import StepInfo from "./components/StepInfo";
 import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import { useStepRunner } from "./hooks/useStepRunner";
@@ -104,6 +105,13 @@ export default function App() {
             speedMs={runner.speedMs}
             onSpeedChange={runner.setSpeedMs}
           />
+
+          <StepInfo
+            index={runner.index}
+            total={steps.length}
+            note={runner.current?.note ?? null}
+          />
+          
           <Canvas />
         </section>
 

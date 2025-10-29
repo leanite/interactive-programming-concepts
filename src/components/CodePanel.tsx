@@ -66,7 +66,11 @@ export default function CodePanel({ language }: Props) {
         Code ({language})
       </div>
 
-      <CodeViewer language={language} code={codeSamples[language]} />
+      <CodeViewer
+        language={language}
+        code={codeSamples[language]}
+        highlight={{ start: 3, end: 5 }} // Example range for visual test
+      />
     </aside>
   );
 }

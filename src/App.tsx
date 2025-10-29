@@ -1,18 +1,22 @@
 import yaml from "js-yaml";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
 import StepInfo from "./components/StepInfo";
 import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import { useStepRunner } from "./hooks/useStepRunner";
-import type { StepSequence, StepFile, Language } from "@types";
+import type { StepSequence, StepFile, Language, VisualizationState } from "@types";
 
 export default function App() {
   // App holds the current language state (kept from previous commit)
   const [language, setLanguage] = useState<Language>("typescript");
-
   const [steps, setSteps] = useState<StepSequence>([]);
+
+  const baseValues = useMemo<number[]>(
+    () => [12, 80, 40, 64, 32, 96, 20, 72],
+    []
+  );
 
   useEffect(() => {
     let active = true;
@@ -82,6 +86,19 @@ export default function App() {
     initialSpeedMs: 700,
   });
 
+  const visualState: VisualizationState = useMemo(() => {
+    if (baseValues.length === 0) {
+      return { values: [], focus: undefined };
+    }
+    const j = runner.index % baseValues.length;
+    const i1 = j;
+    const i2 = (j + 1) % baseValues.length;
+    return {
+      values: baseValues,
+      focus: { i1, i2 },
+    };
+  }, [runner.index, baseValues]);
+
   // Compute highlight range for CodePanel based on current step
   const highlight = runner.current
     ? { start: runner.current.lineStart, end: runner.current.lineEnd }
@@ -113,7 +130,7 @@ export default function App() {
             note={runner.current?.note ?? null}
           />
 
-          <Canvas />
+          <Canvas state={visualState} />
         </section>
 
         <CodePanel language={language} highlight={highlight} />

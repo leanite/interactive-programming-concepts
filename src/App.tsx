@@ -3,8 +3,8 @@ import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
 import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
-import { useStepRunner, type Step } from "./hooks/useStepRunner";
-import type { Language } from "./types/language";
+import { useStepRunner } from "./hooks/useStepRunner";
+import type { Step, Language } from "@types";
 
 export default function App() {
   // App holds the current language state (kept from previous commit)

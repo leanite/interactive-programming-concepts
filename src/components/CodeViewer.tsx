@@ -14,7 +14,7 @@ import "prismjs/components/prism-rust";
 // Theme
 import "prismjs/themes/prism-tomorrow.css";
 
-import type { Language } from "../types/language"; // <-- shared type
+import type { Language } from "@types"; // <-- shared type
 
 type Props = {
   language: Language;

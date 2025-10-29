@@ -1,5 +1,5 @@
 import CodeViewer from "./CodeViewer";
-import type { Language } from "../types/language";
+import type { Language } from "@types";
 
 // Example code snippets for each language
 const codeSamples: Record<Language, string> = {

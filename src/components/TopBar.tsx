@@ -1,4 +1,4 @@
-import type { Language } from "../types/language";
+import type { Language } from "@types";
 
 type Props = {
   language: Language;

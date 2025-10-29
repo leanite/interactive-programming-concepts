@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Step describes a highlight range and an optional note/state for future use
-export type Step = {
-  lineStart: number; // 1-based inclusive
-  lineEnd?: number;  // 1-based inclusive (defaults to lineStart)
-  note?: string;     // free text for UI hints/tooltips
-};
+import type { Step } from "@types";
 
 type Options = {
   steps: Step[];

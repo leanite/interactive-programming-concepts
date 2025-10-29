@@ -16,43 +16,60 @@ type Language = "typescript" | "python" | "java" | "c" | "rust";
 type Props = {
   language: Language;
   code: string;
-  highlight?: { start: number; end?: number }; // highlight range (1-based)
+  highlight?: { start: number; end?: number }; // 1-based inclusive range
 };
 
 export default function CodeViewer({ language, code, highlight }: Props) {
-  // Create highlighted HTML from code
-  const highlighted = useMemo(() => {
-    const grammar = Prism.languages[language] || Prism.languages.typescript;
-    return Prism.highlight(code, grammar, language);
-  }, [code, language]);
+  // Precompute grammar; fallback to TS if missing
+  const grammar = useMemo(
+    () => Prism.languages[language] || Prism.languages.typescript,
+    [language]
+  );
 
-  const lines = code.split("\n");
+  // Split code into individual lines to render gutters + per-line highlight
+  const lines = useMemo(() => code.split("\n"), [code]);
+
   const start = highlight?.start ?? -1;
   const end = highlight?.end ?? start;
 
   return (
-    <div className="relative font-mono text-sm overflow-auto">
+    <div
+      className="relative font-mono text-sm overflow-auto"
+      role="region"
+      aria-label="Code viewer with line numbers"
+    >
+      {/* Using a semantic <pre> but we render lines ourselves for better control */}
       <pre className={`language-${language} m-0`}>
-        <code>
+        <code className="block">
           {lines.map((line, idx) => {
             const lineNum = idx + 1;
             const active = lineNum >= start && lineNum <= end;
+
             return (
               <div
                 key={idx}
-                className={`px-4 whitespace-pre ${
+                className={`flex gap-3 pr-4 whitespace-pre leading-6 ${
                   active ? "bg-cyan-500/10" : ""
                 }`}
               >
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: Prism.highlight(
-                      line,
-                      Prism.languages[language],
-                      language
-                    ),
-                  }}
-                />
+                {/* Gutter: line number column */}
+                <div
+                  className="select-none text-right w-10 shrink-0 pl-3 pr-1 text-neutral-500"
+                  aria-hidden="true"
+                  title={`Line ${lineNum}`}
+                >
+                  {lineNum}
+                </div>
+
+                {/* Code content: highlighted per-line */}
+                <div className="min-w-0">
+                  <span
+                    // NOTE: Highlight per-line to preserve alignment with gutter
+                    dangerouslySetInnerHTML={{
+                      __html: Prism.highlight(line || " ", grammar, language),
+                    }}
+                  />
+                </div>
               </div>
             );
           })}

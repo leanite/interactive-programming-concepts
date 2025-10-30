@@ -5,7 +5,7 @@ This project uses a small, plug-in oriented engine so that **algorithms**, **lan
 ### Core contracts
 
 - **`IAlgorithmTracer<TInitial>`**  
-  Given an initial structure, produces a `StepSequence` (each `Step` includes code line range, note, and optional visual operations).  
+  Given an initial structure, `buildTrace(initial: TInitial)` produces a `StepSequence` (each `Step` includes code line range, note, and optional visual operations).  
   Also exposes:
   - `snippetId`: stable id for the code viewer (e.g., `bubble-sort:typescript`)
   - `structureKind`: renderer key (e.g., `array`, `tree`, `graph`)
@@ -46,3 +46,10 @@ Renderers and tracers use these constants instead of hard-coded strings to ensur
 
 - **`src/engine/bootstrap.ts`** creates shared registries (`TracerRegistry`, `LanguageRegistry`, `RendererRegistry`), registers the `ArrayRenderer` under the `structureKind` key `"array"`, and exports a shared `Runner`.  
   Future tracers/adapters are added via `tracerRegistry.register("<algorithm-id>:<language-id>", tracer)` and `languageRegistry.register("<language-id>", adapter)` without modifying the UI or the runner.
+
+### VisualStepBuilder (shared utility)
+
+- **`VisualStepBuilder`** (`src/tracers/VisualStepBuilder.ts`)  
+  A lightweight helper used by tracers to construct visual step sequences consistently.  
+  Each call to `add(range, note, operations?)` creates a new visual step;  
+  `build()` finalizes and returns the `StepSequence`.

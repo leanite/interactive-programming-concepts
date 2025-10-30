@@ -8,7 +8,7 @@ import type { StepSequence } from "@types";
  */
 export interface IAlgorithmTracer<TInitial> {
   /** Generate the full step-by-step trace for this initial structure. */
-  trace(initial: TInitial): StepSequence;
+  buildTrace(initial: TInitial): StepSequence;
 
   /**
    * Stable snippet id for the code viewer (e.g., "bubble-sort:typescript").

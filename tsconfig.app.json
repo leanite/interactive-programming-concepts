@@ -16,6 +16,7 @@
       "@engines": ["engine/index.ts"],
       "@engines-registry": ["engine/registry.ts"],
       "@renderers": ["renderers/index.ts"],
+      "@tracers": ["tracers/index.ts"],
     },
 
     /* Bundler mode */

@@ -37,7 +37,7 @@ export class Runner {
     const adapter = this.languages.get(languageId);
 
     // 1) Let the tracer build the semantic steps.
-    const rawSteps = tracer.trace(initialStructure);
+    const rawSteps = tracer.buildTrace(initialStructure);
 
     // 2) Optionally, a future pass could map semantic labels to precise line ranges using the adapter.
     //    At this commit, we assume steps already carry { lineStart, lineEnd }.

@@ -53,3 +53,11 @@ Renderers and tracers use these constants instead of hard-coded strings to ensur
   A lightweight helper used by tracers to construct visual step sequences consistently.  
   Each call to `add(range, note, operations?)` creates a new visual step;  
   `build()` finalizes and returns the `StepSequence`.
+
+### App wiring (trace-driven)
+
+The UI now consumes the engine outputs:
+- `runner.buildTrace(algorithmId, languageId, initialStructure)` → returns the `StepSequence` and metadata.
+- `runner.computeVisualState(structureKind, initialVisual, steps, index)` → reduces all visual operations up to `index` into a visual state (`ArrayVisualState` for arrays).
+
+The app remains UI-agnostic regarding concrete algorithms. Switching to another tracer or language is a registration concern (engine bootstrap), not a UI change.

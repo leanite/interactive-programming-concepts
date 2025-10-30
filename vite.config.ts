@@ -1,7 +1,21 @@
 import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
+
+const rootDir = dirname(fileURLToPath(import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@types': resolve(rootDir, 'src/types/index.ts'),
+      '@operations': resolve(rootDir, 'src/types/operations.ts'),
+      '@engines': resolve(rootDir, 'src/engine/index.ts'),
+      '@engines-registry': resolve(rootDir, 'src/engine/registry.ts'),
+      '@renderers': resolve(rootDir, 'src/renderers/index.ts'),
+      '@tracers': resolve(rootDir, 'src/tracers/index.ts'),
+    },
+  },
 })

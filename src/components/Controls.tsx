@@ -4,6 +4,7 @@ type Props = {
   onStep: () => void;
   onBack: () => void;
   onReset: () => void;
+  onRandomize: () => void;
   speedMs: number;
   onSpeedChange: (ms: number) => void;
 };
@@ -14,6 +15,7 @@ export default function Controls({
   onStep,
   onBack,
   onReset,
+  onRandomize,
   speedMs,
   onSpeedChange,
 }: Props) {
@@ -23,6 +25,13 @@ export default function Controls({
   return (
     <div className="bg-neutral-900 rounded-xl p-4 border border-neutral-800">
       <div className="flex flex-wrap items-center gap-2">
+        {/* Randomize button */}
+        <button
+          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          onClick={onRandomize}
+        >
+          Randomize
+        </button>
         {/* Reset button */}
         <button
           className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
@@ -33,11 +42,11 @@ export default function Controls({
 
         {/* Prev */}
         <button
-            className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
-            onClick={onBack}
-            disabled={isPlaying}
-            title={isPlaying ? "Pause to navigate manually" : "Go back one step"}
-          >
+          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          onClick={onBack}
+          disabled={isPlaying}
+          title={isPlaying ? "Pause to navigate manually" : "Go back one step"}
+        >
           Prev
         </button>
 

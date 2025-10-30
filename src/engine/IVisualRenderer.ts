@@ -1,4 +1,4 @@
-import type { VisualOperation } from "@types";
+import type { VisualOperation } from "@operations";
 
 /**
  * Visual renderer: interprets domain operations and produces a visual state

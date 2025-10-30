@@ -1,5 +1,5 @@
 import type { Step, StepSequence } from "@types";
-import type { VisualOperation } from "@types";
+import type { VisualOperation } from "@operations";
 import { TracerRegistry, LanguageRegistry, RendererRegistry } from "./registry";
 import type { IVisualRenderer } from "./IVisualRenderer";
 

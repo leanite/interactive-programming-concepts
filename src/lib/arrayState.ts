@@ -1,4 +1,4 @@
-import type { ArrayOperation } from "@types";
+import type { ArrayOperation } from "@operations";
 
 export type ArrayState = {
   values: number[];

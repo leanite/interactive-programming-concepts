@@ -1,14 +1,26 @@
-// Visual operations describe domain actions that the renderer will interpret.
-// Start with array-focused operations; we will extend this union with tree/graph later.
+/**
+ * OperationKind defines every possible kind of visual operation.
+ * It serves as the single source of truth across renderers and tracers.
+ */
+export const OperationKind = {
+    // Array operations
+    ArrayCompare: "array/compare",
+    ArraySwap: "array/swap",
+  
+    // (future)
+    // TreeInsert: "tree/insert",
+    // GraphAddEdge: "graph/add-edge",
+  } as const;
+  
+// Derived type for all operation kind string literals
+export type OperationKind = (typeof OperationKind)[keyof typeof OperationKind];
 
+/**
+ * Visual operations describe domain actions interpreted by renderers.
+ */
 export type ArrayOperation =
-  | { kind: "array/compare"; i: number; j: number } // highlight two indices (no mutation)
-  | { kind: "array/swap"; i: number; j: number };   // swap values at indices
+  | { kind: typeof OperationKind.ArrayCompare; i: number; j: number }
+  | { kind: typeof OperationKind.ArraySwap; i: number; j: number };
 
-// In the future we will add:
-// export type TreeOperation = { kind: "tree/create-node"; id: string; value: number } | ...;
-// export type GraphOperation = { kind: "graph/add-edge"; u: string; v: string } | ...;
-
-// For now, the overall visual operation type equals the array operations.
-// This keeps the engine minimal while providing a clear extension point.
+// Future: extend VisualOperation with tree and graph operations.
 export type VisualOperation = ArrayOperation;

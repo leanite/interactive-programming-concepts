@@ -7,7 +7,8 @@ import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import { computeArrayState } from "./lib/arrayState";
 import { useStepRunner } from "./hooks/useStepRunner";
-import type { StepSequence, StepFile, Language, VisualizationState, ArrayOperation } from "@types";
+import type { StepSequence, StepFile, Language, VisualizationState } from "@types";
+import type { ArrayOperation } from "@operations";
 
 export default function App() {
   // App holds the current language state (kept from previous commit)

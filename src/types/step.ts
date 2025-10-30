@@ -1,5 +1,5 @@
 import type { Language } from "./language";
-import type { VisualOperation } from "@types";
+import type { VisualOperation } from "@operations";
 
 /**
  * A single step in the execution trace.

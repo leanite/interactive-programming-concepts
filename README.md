@@ -27,3 +27,22 @@ This project uses a small, plug-in oriented engine so that **algorithms**, **lan
   2. `computeVisualState()` aggregates all operations up to a given step index and delegates interpretation to the proper renderer.
 
 > UI components (player, code viewer, canvas) consume these outputs but are **not** coupled to specific algorithms or languages.
+
+### OperationKind (centralized)
+
+- **`OperationKind`** (`src/types/OperationKind.ts`) defines every legal operation kind.
+  Current values:
+  - `OperationKind.ArrayCompare` → `"array/compare"`
+  - `OperationKind.ArraySwap` → `"array/swap"`
+
+Renderers and tracers use these constants instead of hard-coded strings to ensure consistency and scalability across domains.
+
+### Array renderer (visual)
+
+- **`ArrayState`** (`src/types/visual.ts`): the visual state for 1D arrays consumed by the canvas (`values` + optional `focus` pair).
+- **`ArrayRenderer`** (`src/renderers/ArrayRenderer.ts`): interprets `"array/compare"` and `"array/swap"` operations and reduces them into an `ArrayState`.
+
+### Engine bootstrap
+
+- **`src/engine/bootstrap.ts`** creates shared registries (`TracerRegistry`, `LanguageRegistry`, `RendererRegistry`), registers the `ArrayRenderer` under the `structureKind` key `"array"`, and exports a shared `Runner`.  
+  Future tracers/adapters are added via `tracerRegistry.register("<algorithm-id>:<language-id>", tracer)` and `languageRegistry.register("<language-id>", adapter)` without modifying the UI or the runner.

@@ -1,1 +1,0 @@
-export type Language = "java" | "python" | "c" | "rust" | "typescript";

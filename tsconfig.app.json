@@ -13,6 +13,7 @@
     "paths": {
       "@types": ["types/index.ts"],
       "@operations": ["types/operations.ts"],
+      "@languages": ["types/languages.ts"],
       "@engines": ["engine/index.ts"],
       "@engines-registry": ["engine/registry.ts"],
       "@renderers": ["renderers/index.ts"],

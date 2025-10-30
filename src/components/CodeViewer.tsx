@@ -14,10 +14,10 @@ import "prismjs/components/prism-rust";
 // Theme
 import "prismjs/themes/prism-tomorrow.css";
 
-import type { Language } from "@types"; // <-- shared type
+import type { LanguageId } from "@types"; // <-- shared type
 
 type Props = {
-  language: Language;
+  language: LanguageId;
   code: string;
   highlight?: { start: number; end?: number }; // 1-based inclusive range
 };

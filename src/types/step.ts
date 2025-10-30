@@ -1,4 +1,4 @@
-import type { Language } from "./language";
+import type { LanguageId } from "./languages";
 import type { VisualOperation } from "@operations";
 
 /**
@@ -20,7 +20,7 @@ export type StepSequence = Step[];
 export type StepFile = {
   // Versioning future-proof: allows schema evolution if needed
   version?: string; // e.g., "1"
-  language: Language; // language that this step file targets
+  language: LanguageId; // language that this step file targets
   algorithm?: string; // optional algorithm id/name, e.g., "bubble-sort"
   steps: StepSequence; // the actual list of steps
 };

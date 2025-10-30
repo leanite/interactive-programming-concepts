@@ -1,5 +1,4 @@
 import type { IAlgorithmTracer } from "./IAlgorithmTracer";
-import type { ILanguageAdapter } from "./ILanguageAdapter";
 import type { IVisualRenderer } from "./IVisualRenderer";
 
 type TracerKey = `${string}:${string}`; // example: "bubble-sort:typescript"
@@ -20,21 +19,6 @@ export class TracerRegistry {
     const tracer = this.tracers.get(key);
     if (!tracer) throw new Error(`Tracer not found: ${key}`);
     return tracer as IAlgorithmTracer<TInitial>;
-  }
-}
-
-/** Stores language adapters keyed by language id (e.g., "typescript"). */
-export class LanguageRegistry {
-  private readonly adapters = new Map<string, ILanguageAdapter>();
-
-  register(languageId: string, adapter: ILanguageAdapter): void {
-    this.adapters.set(languageId, adapter);
-  }
-
-  get(languageId: string): ILanguageAdapter {
-    const adapter = this.adapters.get(languageId);
-    if (!adapter) throw new Error(`Language adapter not found: ${languageId}`);
-    return adapter;
   }
 }
 

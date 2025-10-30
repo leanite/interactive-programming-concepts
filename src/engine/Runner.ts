@@ -1,6 +1,6 @@
 import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
-import { TracerRegistry, LanguageRegistry, RendererRegistry } from "./registry";
+import { TracerRegistry, RendererRegistry } from "./registry";
 import type { IVisualRenderer } from "./IVisualRenderer";
 
 /**
@@ -9,12 +9,10 @@ import type { IVisualRenderer } from "./IVisualRenderer";
  */
 export class Runner {
   private tracers: TracerRegistry;
-  private languages: LanguageRegistry;
   private renderers: RendererRegistry;
 
-  constructor(tracers: TracerRegistry, languages: LanguageRegistry, renderers: RendererRegistry) {
+  constructor(tracers: TracerRegistry, renderers: RendererRegistry) {
     this.tracers = tracers;
-    this.languages = languages;
     this.renderers = renderers;
   }
 
@@ -30,11 +28,9 @@ export class Runner {
     steps: StepSequence;
     structureKind: string;
     snippetId: string;
-    languageDisplay: string;
   } {
     const tracerKey = `${algorithmId}:${languageId}` as const;
     const tracer = this.tracers.get<TInitial>(tracerKey);
-    const adapter = this.languages.get(languageId);
 
     // 1) Let the tracer build the semantic steps.
     const rawSteps = tracer.buildTrace(initialStructure);
@@ -46,8 +42,7 @@ export class Runner {
     return {
       steps: mappedSteps,
       structureKind: tracer.structureKind,
-      snippetId: tracer.snippetId,
-      languageDisplay: adapter.displayName,
+      snippetId: tracer.snippetId
     };
   }
 

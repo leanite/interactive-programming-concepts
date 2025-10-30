@@ -7,7 +7,7 @@ import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
 
 import { useStepRunner } from "./hooks/useStepRunner";
-import type { Language } from "./types/language";
+import { LanguageCatalog, type LanguageId } from "./types/languages";
 import type { StepSequence } from "./types/step";
 import type { ArrayVisualState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
@@ -25,11 +25,10 @@ function createRandomArray(length: number): number[] {
 }
 
 export default function App() {
-  const [language, setLanguage] = React.useState<Language>("typescript");
+  const [language, setLanguage] = React.useState<LanguageId>(LanguageCatalog.default);
 
   // Base values for the algorithm visualization (random, created once on mount).
-  // If you want a new random instance later, we will add a control in a future commit.
-  const baseValues = React.useMemo<number[]>(() => createRandomArray(8), []);
+  const [baseValues, setBaseValues] = React.useState<number[]>(() => createRandomArray(8));
 
   // Steps produced by the engine (tracer) for the current baseValues and language.
   const [steps, setSteps] = React.useState<StepSequence>([]);
@@ -59,7 +58,7 @@ export default function App() {
     // with no focus on any index pair.
     const initialVisual: ArrayVisualState = { values: baseValues };
 
-    // The structure kind for Bubble Sort on arrays is "array".
+      // The structure kind for Bubble Sort on arrays is "array".
     return runner.computeVisualState<ArrayVisualState>(
       "array",
       initialVisual,
@@ -67,6 +66,11 @@ export default function App() {
       stepRunner.index
     );
   }, [baseValues, steps, stepRunner.index]);
+
+  const handleRandomize = React.useCallback(() => {
+    stepRunner.reset();                 // ensure playback state is consistent
+    setBaseValues(createRandomArray(8)); // triggers trace rebuild via effect
+  }, [stepRunner]);
 
   return (
     <div className="min-h-screen">
@@ -86,8 +90,7 @@ export default function App() {
             onStep={stepRunner.step}
             onBack={stepRunner.back}
             onReset={stepRunner.reset}
-            onRandomize={() => {
-            }}
+            onRandomize={handleRandomize}
             speedMs={stepRunner.speedMs}
             onSpeedChange={stepRunner.setSpeedMs}
           />

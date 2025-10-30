@@ -1,73 +1,29 @@
-# React + TypeScript + Vite
+## Engine Architecture (plug-in based)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project uses a small, plug-in oriented engine so that **algorithms**, **languages**, and **visual renderers** can be composed without `if/else` chains.
 
-Currently, two official plugins are available:
+### Core contracts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **`IAlgorithmTracer<TInitial>`**  
+  Given an initial structure, produces a `StepSequence` (each `Step` includes code line range, note, and optional visual operations).  
+  Also exposes:
+  - `snippetId`: stable id for the code viewer (e.g., `bubble-sort:typescript`)
+  - `structureKind`: renderer key (e.g., `array`, `tree`, `graph`)
 
-## React Compiler
+- **`ILanguageAdapter`**  
+  Maps semantic labels (e.g., `"outer-loop"`) to concrete code line ranges. Decouples tracers from hard-coded numbers.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **`IVisualRenderer<TState>`**  
+  Interprets domain **operations** and reduces them into a visual state `TState` that the canvas can render.
 
-## Expanding the ESLint configuration
+### Registries and Orchestrator
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **`TracerRegistry`**: stores tracers by `"<algorithm-id>:<language-id>"`.
+- **`LanguageRegistry`**: stores language adapters by `"<language-id>"`.
+- **`RendererRegistry`**: stores visual renderers by `structureKind`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **`Runner`**: orchestrates the flow:
+  1. `buildTrace()` calls the tracer to produce steps and returns metadata (`structureKind`, `snippetId`, `languageDisplay`).
+  2. `computeVisualState()` aggregates all operations up to a given step index and delegates interpretation to the proper renderer.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+> UI components (player, code viewer, canvas) consume these outputs but are **not** coupled to specific algorithms or languages.

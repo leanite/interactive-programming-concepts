@@ -21,18 +21,16 @@ export default function App() {
 
   // Demo ops per step for the base array; one small op each step.
   // Later this comes from YAML alongside step notes/highlights.
-  const arrayOperationsByStep = useMemo<ArrayOperation[]>(() => {
-    return [
-      { type: "compare", i: 0, j: 1 },
-      { type: "swap", i: 0, j: 1 },
-      { type: "compare", i: 2, j: 3 },
-      { type: "swap", i: 2, j: 3 },
-      { type: "compare", i: 3, j: 4 },
-      { type: "compare", i: 5, j: 6 },
-      { type: "swap", i: 5, j: 6 },
-      { type: "compare", i: 6, j: 7 },
-    ];
-  }, []);
+  const arrayOperationsByStep = useMemo<ArrayOperation[]>(() => [
+    { kind: "array/compare", i: 0, j: 1 },
+    { kind: "array/swap", i: 0, j: 1 },
+    { kind: "array/compare", i: 2, j: 3 },
+    { kind: "array/swap", i: 2, j: 3 },
+    { kind: "array/compare", i: 3, j: 4 },
+    { kind: "array/compare", i: 5, j: 6 },
+    { kind: "array/swap", i: 5, j: 6 },
+    { kind: "array/compare", i: 6, j: 7 },
+  ], []);
 
   useEffect(() => {
     let active = true;

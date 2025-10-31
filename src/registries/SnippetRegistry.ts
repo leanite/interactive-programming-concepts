@@ -1,13 +1,6 @@
-import type { AlgorithmType } from "@types";
-import type { LanguageType } from "@types";
 import type { SnippetKey } from "@keys";
 
 export type SnippetPath = string;
-
-/** Compose "<algorithmId>:<languageId>" in a single place. */
-export function snippetKey(algorithm: AlgorithmType, language: LanguageType): SnippetKey {
-  return `${algorithm}:${language}`;
-}
 
 /** Minimal registry for snippet sources (plain text). */
 export class SnippetRegistry {

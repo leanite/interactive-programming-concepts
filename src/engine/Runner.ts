@@ -1,9 +1,10 @@
 import type { AlgorithmType, LanguageType } from "@types";
 import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
-import { TracerRegistry, tracerKey, RendererRegistry } from "@registries";
 import type { IVisualRenderer } from "@renderers";
 import type { StructureType } from "types/structures";
+import { TracerRegistry, RendererRegistry } from "@registries";
+import { tracerKey } from "@keys";
 
 /**
  * Runner orchestrates tracing and visual computation via registries.

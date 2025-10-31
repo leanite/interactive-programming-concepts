@@ -1,39 +1,52 @@
 import type { IAlgorithmTracer } from "@tracers";
-import type { StepSequence } from "@types";
+import type { SnippetKey, TracerKey } from "@keys";
+import { snippetKey, tracerKey } from "@keys";
+import { Algorithm, type LanguageType, type StepSequence } from "@types";
 import { Operation } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";
 import { Structure } from "@structures";
 
-/**
- * Tracer for Bubble Sort on numeric arrays.
- * Produces a step-by-step trace describing the algorithm flow.
- */
+/** Code range map required by this tracer (algorithm-specific shape). */
+export type BubbleSortCodeRanges = {
+  signature: { lineStart: number; lineEnd?: number };
+  outerLoop: { lineStart: number; lineEnd?: number };
+  innerLoop: { lineStart: number; lineEnd?: number };
+  compare: { lineStart: number; lineEnd?: number };
+  swapBlock: { lineStart: number; lineEnd?: number };
+  returnStmt: { lineStart: number; lineEnd?: number };
+};
 
-//TODO: BubbleSortArrayTracer na verdade é um BubbleSort de Array para Typescript! Tem que escalar pra outras linguagens
+/**
+ * Language-agnostic Bubble Sort tracer for numeric arrays.
+ * Receives ids and code ranges via constructor, so the same tracer can be reused
+ * for different languages/snippets by injecting a different ranges object.
+ */
 export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
-  readonly tracerId = "bubble-sort:typescript";
+  readonly algorithm = Algorithm.BubbleSort;
+  readonly tracerId: TracerKey;
+  readonly snippetId: SnippetKey;
   readonly structure = Structure.Array;
+
+  private readonly lines: BubbleSortCodeRanges;
+
+  constructor(language: LanguageType, lines: BubbleSortCodeRanges) {
+    this.tracerId = tracerKey(this.algorithm, language);
+    this.snippetId = snippetKey(this.algorithm, language);
+    this.lines = lines;
+  }
 
   buildTrace(initial: number[]): StepSequence {
     const array = [...initial];
     const stepBuilder = new VisualStepBuilder();
+    const L = this.lines;
 
-    const lines = {
-      signature: { lineStart: 1 },
-      outerLoop: { lineStart: 2 },
-      innerLoop: { lineStart: 3 },
-      compare: { lineStart: 4 },
-      swapBlock: { lineStart: 5, lineEnd: 7 },
-      returnStmt: { lineStart: 12 },
-    };
-
-    stepBuilder.add(lines.signature, "Initialize bubble sort");
+    stepBuilder.add(L.signature, "Initialize bubble sort");
 
     for (let i = 0; i < array.length - 1; i++) {
-      stepBuilder.add(lines.outerLoop, `Outer loop i = ${i}`);
+      stepBuilder.add(L.outerLoop, `Outer loop i = ${i}`);
       for (let j = 0; j < array.length - i - 1; j++) {
         stepBuilder.add(
-          lines.innerLoop,
+          L.innerLoop,
           `Compare indices ${j} and ${j + 1}`,
           [{ operation: Operation.ArrayCompare, i: j, j: j + 1 }]
         );
@@ -44,17 +57,17 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
           array[j + 1] = temp;
 
           stepBuilder.add(
-            lines.swapBlock,
+            L.swapBlock,
             `Swap ${j} and ${j + 1}`,
             [{ operation: Operation.ArraySwap, i: j, j: j + 1 }]
           );
         } else {
-          stepBuilder.add(lines.compare, "No swap needed");
+          stepBuilder.add(L.compare, "No swap needed");
         }
       }
     }
 
-    stepBuilder.add(lines.returnStmt, "Return sorted array");
+    stepBuilder.add(L.returnStmt, "Return sorted array");
     return stepBuilder.build();
   }
 }

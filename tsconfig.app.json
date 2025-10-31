@@ -22,7 +22,8 @@
       "@registries": ["registries/index.ts"],
       "@renderers": ["renderers/index.ts"],
       "@tracers": ["tracers/index.ts"],
-      "@snippets": ["snippets/"],
+      "@snippets": ["snippets/index.ts"],
+      "@snippets-dir": ["snippets"],
     },
 
     /* Bundler mode */

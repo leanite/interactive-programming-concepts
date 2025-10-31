@@ -1,12 +1,5 @@
 import type { IAlgorithmTracer } from "@tracers";
-import type { AlgorithmType } from "@algorithms";
-import type { LanguageType } from "@languages";
 import type { TracerKey } from "@keys";
-
-/** Compose "<algorithmId>:<languageId>" in a single place. */
-export function tracerKey(algorithm: AlgorithmType, language: LanguageType): TracerKey {
-    return `${algorithm}:${language}`;
-}
 
 /**
  * Stores algorithm tracers keyed by "<algorithm-id>:<language>".

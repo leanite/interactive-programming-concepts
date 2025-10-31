@@ -21,7 +21,8 @@ export default defineConfig({
       '@registries': resolve(rootDir, 'src/registries/index.ts'),
       '@renderers': resolve(rootDir, 'src/renderers/index.ts'),
       '@tracers': resolve(rootDir, 'src/tracers/index.ts'),
-      '@snippets': resolve(rootDir, 'src/snippets/'),
+      '@snippets': resolve(rootDir, 'src/snippets/index.ts'),
+      '@snippets-dir': resolve(rootDir, 'src/snippets'),
     },
   },
 })

@@ -1,4 +1,4 @@
-import type { IVisualRenderer } from "@engines";
+import type { IVisualRenderer } from "@renderers";
 import type { VisualOperation } from "@operations";
 import type { ArrayVisualState } from "@types";
 import { OperationKind } from "@operations";

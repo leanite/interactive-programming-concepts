@@ -1,7 +1,7 @@
 // Centralized engine Bootstrap: creates registries, registers built-in renderers,
 // and exposes a shared Runner. This file does NOT wire UI; it only prepares the engine.
 
-import { TracerRegistry, RendererRegistry } from "@engines-registry";
+import { TracerRegistry, RendererRegistry } from "@registries";
 import { Runner } from "@engines";
 import { ArrayRenderer } from "@renderers";
 import { BubbleSortArrayTracer } from "@tracers"

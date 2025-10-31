@@ -1,7 +1,7 @@
 import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
-import { TracerRegistry, RendererRegistry } from "./registry";
-import type { IVisualRenderer } from "./IVisualRenderer";
+import { TracerRegistry, RendererRegistry } from "@registries";
+import type { IVisualRenderer } from "@renderers";
 
 /**
  * Runner orchestrates tracing and visual computation via registries.

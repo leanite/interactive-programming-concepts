@@ -15,7 +15,7 @@
       "@operations": ["types/operations.ts"],
       "@languages": ["types/languages.ts"],
       "@engines": ["engine/index.ts"],
-      "@engines-registry": ["engine/registry.ts"],
+      "@registries": ["registries/index.ts"],
       "@renderers": ["renderers/index.ts"],
       "@tracers": ["tracers/index.ts"],
     },

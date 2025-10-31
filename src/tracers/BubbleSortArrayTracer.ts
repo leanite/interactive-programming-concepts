@@ -1,4 +1,4 @@
-import type { IAlgorithmTracer } from "@engines";
+import type { IAlgorithmTracer } from "@tracers";
 import type { StepSequence } from "@types";
 import { OperationKind } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";

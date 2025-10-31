@@ -14,6 +14,7 @@ export default defineConfig({
       '@operations': resolve(rootDir, 'src/types/operations.ts'),
       '@languages': resolve(rootDir, 'src/types/languages.ts'),
       '@algorithms': resolve(rootDir, 'src/types/algorithms.ts'),
+      '@structures': resolve(rootDir, 'src/types/structures.ts'),
       '@engines': resolve(rootDir, 'src/engine/index.ts'),
       '@factories': resolve(rootDir, 'src/factories/index.ts'),
       '@registries': resolve(rootDir, 'src/registries/index.ts'),

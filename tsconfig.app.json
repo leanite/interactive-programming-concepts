@@ -15,6 +15,7 @@
       "@operations": ["types/operations.ts"],
       "@languages": ["types/languages.ts"],
       "@algorithms": ["types/algorithms.ts"],
+      "@structures": ["types/structures.ts"],
       "@engines": ["engine/index.ts"],
       "@factories": ["factories/index.ts"],
       "@registries": ["registries/index.ts"],

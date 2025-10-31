@@ -1,16 +1,16 @@
-// src/App.tsx
 import React from "react";
 import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
 import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
-
 import { useStepRunner } from "./hooks/useStepRunner";
-import { LanguageCatalog, type LanguageId } from "./types/languages";
+import { Language, LanguageCatalog, type LanguageId } from "./types/languages";
 import type { StepSequence } from "./types/step";
 import type { ArrayVisualState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
+import { Structure } from "@structures";
+import { Algorithm } from "@algorithms";
 
 /**
  * Helper to create a fresh random numeric array (1..99) of a given length.
@@ -36,7 +36,7 @@ export default function App() {
   // Build or rebuild the step trace whenever the language changes.
   // For now, we keep the Bubble Sort tracer keyed as "bubble-sort:typescript".
   React.useEffect(() => {
-    const traceInfo = runner.buildTrace("bubble-sort", "typescript", baseValues);
+    const traceInfo = runner.buildTrace(Algorithm.BubbleSort, Language.TypeScript, baseValues);
     setSteps(traceInfo.steps);
   }, [language, baseValues]);
 
@@ -60,7 +60,7 @@ export default function App() {
 
       // The structure kind for Bubble Sort on arrays is "array".
     return runner.computeVisualState<ArrayVisualState>(
-      "array",
+      Structure.Array,
       initialVisual,
       steps,
       stepRunner.index

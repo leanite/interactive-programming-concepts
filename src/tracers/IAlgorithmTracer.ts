@@ -1,3 +1,4 @@
+import type { StructureId } from "@structures";
 import type { StepSequence } from "@types";
 
 /**
@@ -6,9 +7,9 @@ import type { StepSequence } from "@types";
  *
  * The tracer is agnostic of UI and canvas; it only emits semantic steps.
  */
-export interface IAlgorithmTracer<TInitial> {
+export interface IAlgorithmTracer<T> {
   /** Generate the full step-by-step trace for this initial structure. */
-  buildTrace(initial: TInitial): StepSequence;
+  buildTrace(initial: T): StepSequence;
 
   /**
    * Stable snippet id for the code viewer (e.g., "bubble-sort:typescript").
@@ -20,5 +21,5 @@ export interface IAlgorithmTracer<TInitial> {
    * Structure kind consumed by a visual renderer (e.g., "array", "tree", "graph").
    * This acts as a key in the renderer registry.
    */
-  readonly structureKind: string;
+  readonly structure: StructureId;
 }

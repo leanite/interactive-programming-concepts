@@ -1,4 +1,4 @@
-import type { ArrayOperation } from "@operations";
+import { OperationKind, type ArrayOperation } from "@operations";
 
 export type ArrayState = {
   values: number[];
@@ -13,9 +13,9 @@ export function computeArrayState(base: number[], operations: ArrayOperation[]):
   let focus: ArrayState["focus"];
 
   for (const operation of operations) {
-    if (operation.kind === "array/compare") {
+    if (operation.kind === OperationKind.ArrayCompare) {
       focus = { i1: operation.i, i2: operation.j };
-    } else if (operation.kind === "array/swap") {
+    } else if (operation.kind === OperationKind.ArraySwap) {
       const i = operation.i;
       const j = operation.j;
       const temp = values[i];

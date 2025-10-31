@@ -2,14 +2,17 @@ import type { IAlgorithmTracer } from "@tracers";
 import type { StepSequence } from "@types";
 import { OperationKind } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";
+import { Structure } from "@structures";
 
 /**
  * Tracer for Bubble Sort on numeric arrays.
  * Produces a step-by-step trace describing the algorithm flow.
  */
+
+//TODO: BubbleSortArrayTracer na verdade é um BubbleSort de Array para Typescript! Tem que escalar pra outras linguagens
 export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
   readonly snippetId = "bubble-sort:typescript";
-  readonly structureKind = "array";
+  readonly structure = Structure.Array;
 
   buildTrace(initial: number[]): StepSequence {
     const array = [...initial];

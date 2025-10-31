@@ -1,6 +1,13 @@
 import type { IAlgorithmTracer } from "@tracers";
+import type { AlgorithmId } from "@algorithms";
+import type { LanguageId } from "@languages";
 
 type TracerKey = `${string}:${string}`; // example: "bubble-sort:typescript"
+
+/** Compose "<algorithmId>:<languageId>" in a single place. */
+export function tracerKey(algorithmId: AlgorithmId, languageId: LanguageId): TracerKey {
+    return `${algorithmId}:${languageId}`;
+}
 
 /**
  * Stores algorithm tracers keyed by "<algorithm-id>:<language>".
@@ -13,9 +20,9 @@ export class TracerRegistry {
         this.tracers.set(key, tracer);
     }
 
-    get<TInitial>(key: TracerKey): IAlgorithmTracer<TInitial> {
+    get<T>(key: TracerKey): IAlgorithmTracer<T> {
         const tracer = this.tracers.get(key);
         if (!tracer) throw new Error(`Tracer not found: ${key}`);
-        return tracer as IAlgorithmTracer<TInitial>;
+        return tracer as IAlgorithmTracer<T>;
     }
 }

@@ -1,3 +1,4 @@
+import type { AlgorithmId, LanguageId } from "@types";
 import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
 import { TracerRegistry, RendererRegistry } from "@registries";
@@ -20,11 +21,7 @@ export class Runner {
    * Produce a full trace for a given algorithm+language combo.
    * The tracer emits steps; language adapter can later refine line ranges.
    */
-  buildTrace<TInitial>(
-    algorithmId: string,
-    languageId: string,
-    initialStructure: TInitial
-  ): {
+  buildTrace<TInitial>(algorithmId: AlgorithmId, languageId: LanguageId, initialStructure: TInitial): {
     steps: StepSequence;
     structureKind: string;
     snippetId: string;
@@ -52,12 +49,7 @@ export class Runner {
    *
    * The caller determines the concrete TState and the initial visual state.
    */
-  computeVisualState<TState>(
-    structureKind: string,
-    initialState: TState,
-    steps: StepSequence,
-    index: number
-  ): TState {
+  computeVisualState<TState>(structureKind: string, initialState: TState, steps: StepSequence, index: number): TState {
     const renderer: IVisualRenderer<TState> = this.renderers.get<TState>(structureKind);
     const operationsUpToIndex: VisualOperation[] = this.collectOperationsUntil(steps, index);
     return renderer.compute(initialState, operationsUpToIndex);

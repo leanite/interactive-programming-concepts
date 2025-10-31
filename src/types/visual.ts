@@ -10,7 +10,7 @@ export type VisualizationState = {
 
 // Visual state for 1D array renderers.
 // The canvas reads this to draw bars and highlight focused indices.
-export type ArrayVisualState = {
+export type ArrayVisualizationState = {
     /** Current array values to render as bars (heights). */
     values: number[];
     /** Optional focused indices (e.g., compare or swap pairs). */

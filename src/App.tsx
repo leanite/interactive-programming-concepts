@@ -7,7 +7,7 @@ import StepInfo from "./components/StepInfo";
 import { useStepRunner } from "./hooks/useStepRunner";
 import { Language, LanguageCatalog, type LanguageType } from "./types/languages";
 import type { StepSequence } from "./types/step";
-import type { ArrayVisualState } from "./types/visual";
+import type { ArrayVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
 import { Algorithm } from "@algorithms";
@@ -53,13 +53,13 @@ export default function App() {
     : undefined;
 
   // Visual state for the Canvas: reduce visual operations up to the current index.
-  const visualState: ArrayVisualState = React.useMemo(() => {
+  const visualState: ArrayVisualizationState = React.useMemo(() => {
     // Initial visual state for arrays is simply the base values,
     // with no focus on any index pair.
-    const initialVisual: ArrayVisualState = { values: baseValues };
+    const initialVisual: ArrayVisualizationState = { values: baseValues };
 
       // The structure kind for Bubble Sort on arrays is "array".
-    return runner.computeVisualState<ArrayVisualState>(
+    return runner.computeVisualState<ArrayVisualizationState>(
       Structure.Array,
       initialVisual,
       steps,

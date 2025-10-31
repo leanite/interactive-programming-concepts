@@ -1,15 +1,15 @@
 import type { IVisualRenderer } from "@renderers";
 import type { VisualOperation } from "@operations";
-import type { ArrayVisualState } from "@types";
+import type { ArrayVisualizationState } from "@types";
 import { Operation } from "@operations";
 
 /**
  * ArrayRenderer interprets array-focused operations
  * ("array/compare", "array/swap") and reduces them into an ArrayVisualState.
  */
-export class ArrayRenderer implements IVisualRenderer<ArrayVisualState> {
-  compute(initial: ArrayVisualState, operations: VisualOperation[]): ArrayVisualState {
-    const state: ArrayVisualState = {
+export class ArrayRenderer implements IVisualRenderer<ArrayVisualizationState> {
+  compute(initial: ArrayVisualizationState, operations: VisualOperation[]): ArrayVisualizationState {
+    const state: ArrayVisualizationState = {
       values: [...initial.values],
       focus: initial.focus ? { ...initial.focus } : undefined,
     };

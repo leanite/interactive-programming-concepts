@@ -13,10 +13,13 @@ export default defineConfig({
       '@types': resolve(rootDir, 'src/types/index.ts'),
       '@operations': resolve(rootDir, 'src/types/operations.ts'),
       '@languages': resolve(rootDir, 'src/types/languages.ts'),
+      '@algorithms': resolve(rootDir, 'src/types/algorithms.ts'),
       '@engines': resolve(rootDir, 'src/engine/index.ts'),
+      '@factories': resolve(rootDir, 'src/factories/index.ts'),
       '@registries': resolve(rootDir, 'src/registries/index.ts'),
       '@renderers': resolve(rootDir, 'src/renderers/index.ts'),
       '@tracers': resolve(rootDir, 'src/tracers/index.ts'),
+      '@snippets': resolve(rootDir, 'src/snippets/'),
     },
   },
 })

@@ -14,10 +14,13 @@
       "@types": ["types/index.ts"],
       "@operations": ["types/operations.ts"],
       "@languages": ["types/languages.ts"],
+      "@algorithms": ["types/algorithms.ts"],
       "@engines": ["engine/index.ts"],
+      "@factories": ["factories/index.ts"],
       "@registries": ["registries/index.ts"],
       "@renderers": ["renderers/index.ts"],
       "@tracers": ["tracers/index.ts"],
+      "@snippets": ["snippets/"],
     },
 
     /* Bundler mode */

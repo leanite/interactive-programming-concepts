@@ -1,8 +1,8 @@
-import { LanguageCatalog, type LanguageId } from "@languages";
+import { LanguageCatalog, type LanguageType } from "@languages";
 
 type Props = {
-  language: LanguageId;
-  setLanguage: (language: LanguageId) => void;
+  language: LanguageType;
+  setLanguage: (language: LanguageType) => void;
 };
 
 export default function TopBar({ language, setLanguage }: Props) {

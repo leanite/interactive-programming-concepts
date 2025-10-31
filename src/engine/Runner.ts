@@ -1,9 +1,9 @@
-import type { AlgorithmId, LanguageId } from "@types";
+import type { AlgorithmType, LanguageType } from "@types";
 import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
 import { TracerRegistry, tracerKey, RendererRegistry } from "@registries";
 import type { IVisualRenderer } from "@renderers";
-import type { StructureId } from "types/structures";
+import type { StructureType } from "types/structures";
 
 /**
  * Runner orchestrates tracing and visual computation via registries.
@@ -22,12 +22,12 @@ export class Runner {
    * Produce a full trace for a given algorithm+language combo.
    * The tracer emits steps; language adapter can later refine line ranges.
    */
-  buildTrace<T>(algorithmId: AlgorithmId, languageId: LanguageId, initialStructure: T): {
+  buildTrace<T>(algorithm: AlgorithmType, languageId: LanguageType, initialStructure: T): {
     steps: StepSequence;
-    structure: StructureId;
+    structure: StructureType;
     snippetId: string;
   } {
-    const tracer = this.tracers.get<T>(tracerKey(algorithmId, languageId));
+    const tracer = this.tracers.get<T>(tracerKey(algorithm, languageId));
 
     // 1) Let the tracer build the semantic steps.
     const rawSteps = tracer.buildTrace(initialStructure);
@@ -39,7 +39,7 @@ export class Runner {
     return {
       steps: mappedSteps,
       structure: tracer.structure, //TODO: Not used
-      snippetId: tracer.snippetId //TODO: Not used
+      snippetId: tracer.tracerId //TODO: Not used
     };
   }
 
@@ -49,8 +49,8 @@ export class Runner {
    *
    * The caller determines the concrete TState and the initial visual state.
    */
-  computeVisualState<S>(structureKind: StructureId, initialState: S, steps: StepSequence, index: number): S {
-    const renderer: IVisualRenderer<S> = this.renderers.get<S>(structureKind);
+  computeVisualState<S>(structure: StructureType, initialState: S, steps: StepSequence, index: number): S {
+    const renderer: IVisualRenderer<S> = this.renderers.get<S>(structure);
     const operationsUpToIndex: VisualOperation[] = this.collectOperationsUntil(steps, index);
     return renderer.compute(initialState, operationsUpToIndex);
   }

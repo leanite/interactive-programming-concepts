@@ -1,6 +1,6 @@
 import type { IAlgorithmTracer } from "@tracers";
 import type { StepSequence } from "@types";
-import { OperationKind } from "@operations";
+import { Operation } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";
 import { Structure } from "@structures";
 
@@ -11,7 +11,7 @@ import { Structure } from "@structures";
 
 //TODO: BubbleSortArrayTracer na verdade é um BubbleSort de Array para Typescript! Tem que escalar pra outras linguagens
 export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
-  readonly snippetId = "bubble-sort:typescript";
+  readonly tracerId = "bubble-sort:typescript";
   readonly structure = Structure.Array;
 
   buildTrace(initial: number[]): StepSequence {
@@ -35,7 +35,7 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
         stepBuilder.add(
           lines.innerLoop,
           `Compare indices ${j} and ${j + 1}`,
-          [{ kind: OperationKind.ArrayCompare, i: j, j: j + 1 }]
+          [{ operation: Operation.ArrayCompare, i: j, j: j + 1 }]
         );
 
         if (array[j] > array[j + 1]) {
@@ -46,7 +46,7 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
           stepBuilder.add(
             lines.swapBlock,
             `Swap ${j} and ${j + 1}`,
-            [{ kind: OperationKind.ArraySwap, i: j, j: j + 1 }]
+            [{ operation: Operation.ArraySwap, i: j, j: j + 1 }]
           );
         } else {
           stepBuilder.add(lines.compare, "No swap needed");

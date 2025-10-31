@@ -4,4 +4,4 @@ export const Structure = {
     // BST: "bst",
 } as const;
   
-export type StructureId = (typeof Structure)[keyof typeof Structure];
+export type StructureType = (typeof Structure)[keyof typeof Structure];

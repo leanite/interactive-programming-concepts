@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@types': resolve(rootDir, 'src/types/index.ts'),
+      '@keys': resolve(rootDir, 'src/types/keys.ts'),
       '@operations': resolve(rootDir, 'src/types/operations.ts'),
       '@languages': resolve(rootDir, 'src/types/languages.ts'),
       '@algorithms': resolve(rootDir, 'src/types/algorithms.ts'),

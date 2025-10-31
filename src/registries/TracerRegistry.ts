@@ -1,12 +1,11 @@
 import type { IAlgorithmTracer } from "@tracers";
-import type { AlgorithmId } from "@algorithms";
-import type { LanguageId } from "@languages";
-
-type TracerKey = `${string}:${string}`; // example: "bubble-sort:typescript"
+import type { AlgorithmType } from "@algorithms";
+import type { LanguageType } from "@languages";
+import type { TracerKey } from "@keys";
 
 /** Compose "<algorithmId>:<languageId>" in a single place. */
-export function tracerKey(algorithmId: AlgorithmId, languageId: LanguageId): TracerKey {
-    return `${algorithmId}:${languageId}`;
+export function tracerKey(algorithm: AlgorithmType, language: LanguageType): TracerKey {
+    return `${algorithm}:${language}`;
 }
 
 /**

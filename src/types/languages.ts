@@ -11,10 +11,10 @@ export const Language = {
 } as const;
   
 /** Union type of all language ids. */
-export type LanguageId = (typeof Language)[keyof typeof Language];
+export type LanguageType = (typeof Language)[keyof typeof Language];
 
 /** Names and metadata for each language. */
-export const LanguageNames: Record<LanguageId, { name: string }> = {
+export const LanguageNames: Record<LanguageType, { name: string }> = {
   [Language.Java]: { name: "Java" },
   [Language.Python]: { name: "Python" },
   [Language.C]: { name: "C" },
@@ -27,14 +27,14 @@ export const LanguageNames: Record<LanguageId, { name: string }> = {
  * Keeps default id, display names, and validation utilities.
  */
 export class LanguageCatalog {
-  static readonly default: LanguageId = Language.TypeScript;
-  static readonly all: readonly LanguageId[] = Object.values(Language);
+  static readonly default: LanguageType = Language.TypeScript;
+  static readonly all: readonly LanguageType[] = Object.values(Language);
 
-  static label(id: LanguageId): string {
+  static label(id: LanguageType): string {
     return LanguageNames[id].name;
   }
 
-  static isValid(value: string): value is LanguageId {
+  static isValid(value: string): value is LanguageType {
     return (this.all as string[]).includes(value);
   }
 }

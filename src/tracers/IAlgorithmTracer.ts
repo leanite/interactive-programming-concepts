@@ -1,5 +1,6 @@
-import type { StructureId } from "@structures";
+import type { StructureType } from "@structures";
 import type { StepSequence } from "@types";
+import type { TracerKey } from "@keys";
 
 /**
  * Algorithm tracer: given an initial structure, produce a deterministic trace
@@ -15,11 +16,11 @@ export interface IAlgorithmTracer<T> {
    * Stable snippet id for the code viewer (e.g., "bubble-sort:typescript").
    * It allows the UI to choose the proper source snippet to highlight.
    */
-  readonly snippetId: string;
+  readonly tracerId: TracerKey;
 
   /**
    * Structure kind consumed by a visual renderer (e.g., "array", "tree", "graph").
    * This acts as a key in the renderer registry.
    */
-  readonly structure: StructureId;
+  readonly structure: StructureType;
 }

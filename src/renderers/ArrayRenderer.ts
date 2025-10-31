@@ -1,7 +1,7 @@
 import type { IVisualRenderer } from "@renderers";
 import type { VisualOperation } from "@operations";
 import type { ArrayVisualState } from "@types";
-import { OperationKind } from "@operations";
+import { Operation } from "@operations";
 
 /**
  * ArrayRenderer interprets array-focused operations
@@ -15,11 +15,11 @@ export class ArrayRenderer implements IVisualRenderer<ArrayVisualState> {
     };
 
     for (const operation of operations) {
-      switch (operation.kind) {
-        case OperationKind.ArrayCompare:
+      switch (operation.operation) {
+        case Operation.ArrayCompare:
           state.focus = { i1: operation.i, i2: operation.j };
           break;
-        case OperationKind.ArraySwap:
+        case Operation.ArraySwap:
           const i = operation.i;
           const j = operation.j;
           const temp = state.values[i];
@@ -39,8 +39,8 @@ export class ArrayRenderer implements IVisualRenderer<ArrayVisualState> {
   validate?(operations: VisualOperation[]): void {
     for (const operation of operations) {
       if (
-        operation.kind === OperationKind.ArrayCompare ||
-        operation.kind === OperationKind.ArraySwap
+        operation.operation === Operation.ArrayCompare ||
+        operation.operation === Operation.ArraySwap
       ) {
         if (!Number.isInteger(operation.i) || !Number.isInteger(operation.j)) {
           throw new Error(`Invalid array operation indices: ${JSON.stringify(operation)}`);

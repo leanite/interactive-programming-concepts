@@ -5,7 +5,7 @@ import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
 import { useStepRunner } from "./hooks/useStepRunner";
-import { Language, LanguageCatalog, type LanguageId } from "./types/languages";
+import { Language, LanguageCatalog, type LanguageType } from "./types/languages";
 import type { StepSequence } from "./types/step";
 import type { ArrayVisualState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
@@ -25,7 +25,7 @@ function createRandomArray(length: number): number[] {
 }
 
 export default function App() {
-  const [language, setLanguage] = React.useState<LanguageId>(LanguageCatalog.default);
+  const [language, setLanguage] = React.useState<LanguageType>(LanguageCatalog.default);
 
   // Base values for the algorithm visualization (random, created once on mount).
   const [baseValues, setBaseValues] = React.useState<number[]>(() => createRandomArray(8));

@@ -5,4 +5,4 @@ export const Algorithm = {
     // BstInsert: "bst-insert",
 } as const;
   
-export type AlgorithmId = (typeof Algorithm)[keyof typeof Algorithm];
+export type AlgorithmType = (typeof Algorithm)[keyof typeof Algorithm];

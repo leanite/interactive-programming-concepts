@@ -1,8 +1,8 @@
 /**
- * OperationKind defines every possible kind of visual operation.
+ * Operation defines every possible kind of visual operation.
  * It serves as the single source of truth across renderers and tracers.
  */
-export const OperationKind = {
+export const Operation = {
     // Array operations
     ArrayCompare: "array/compare",
     ArraySwap: "array/swap",
@@ -13,14 +13,14 @@ export const OperationKind = {
   } as const;
   
 // Derived type for all operation kind string literals
-export type OperationKind = (typeof OperationKind)[keyof typeof OperationKind];
+export type OperationType = (typeof Operation)[keyof typeof Operation];
 
 /**
  * Visual operations describe domain actions interpreted by renderers.
  */
 export type ArrayOperation =
-  | { kind: typeof OperationKind.ArrayCompare; i: number; j: number }
-  | { kind: typeof OperationKind.ArraySwap; i: number; j: number };
+  | { operation: typeof Operation.ArrayCompare; i: number; j: number }
+  | { operation: typeof Operation.ArraySwap; i: number; j: number };
 
 // Future: extend VisualOperation with tree and graph operations.
 export type VisualOperation = ArrayOperation;

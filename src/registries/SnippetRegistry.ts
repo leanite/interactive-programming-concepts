@@ -1,12 +1,12 @@
-import type { AlgorithmId } from "@types";
-import type { LanguageId } from "@types";
+import type { AlgorithmType } from "@types";
+import type { LanguageType } from "@types";
+import type { SnippetKey } from "@keys";
 
-type SnippetKey = `${string}:${string}`; // example: "bubble-sort:typescript"
-type SnippetPath = string;
+export type SnippetPath = string;
 
 /** Compose "<algorithmId>:<languageId>" in a single place. */
-export function snippetKey(algorithmId: AlgorithmId, languageId: LanguageId): SnippetKey {
-  return `${algorithmId}:${languageId}`;
+export function snippetKey(algorithm: AlgorithmType, language: LanguageType): SnippetKey {
+  return `${algorithm}:${language}`;
 }
 
 /** Minimal registry for snippet sources (plain text). */

@@ -1,8 +1,8 @@
 import CodeViewer from "./CodeViewer";
-import type { LanguageId } from "@types";
+import type { LanguageType } from "@types";
 
 // Example code snippets for each language
-const codeSamples: Record<LanguageId, string> = {
+const codeSamples: Record<LanguageType, string> = {
   java: `public class BubbleSort {
     public static void bubbleSort(int[] arr) {
       int n = arr.length;
@@ -56,7 +56,7 @@ const codeSamples: Record<LanguageId, string> = {
 };
 
 type Props = {
-  language: LanguageId;
+  language: LanguageType;
   highlight?: { start: number; end?: number };
 };
 

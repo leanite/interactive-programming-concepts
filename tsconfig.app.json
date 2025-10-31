@@ -12,6 +12,7 @@
     "baseUrl": "src",
     "paths": {
       "@types": ["types/index.ts"],
+      "@keys": ["types/keys.ts"],
       "@operations": ["types/operations.ts"],
       "@languages": ["types/languages.ts"],
       "@algorithms": ["types/algorithms.ts"],

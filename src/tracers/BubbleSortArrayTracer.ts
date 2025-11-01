@@ -1,6 +1,5 @@
 import type { IAlgorithmTracer } from "@tracers";
-import type { SnippetKey, TracerKey } from "@keys";
-import { snippetKey, tracerKey } from "@keys";
+import { type TracerKey, tracerKey } from "@keys";
 import { Algorithm, type LanguageType, type StepSequence } from "@types";
 import { Operation } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";
@@ -24,14 +23,12 @@ export type BubbleSortCodeRanges = {
 export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
   readonly algorithm = Algorithm.BubbleSort;
   readonly tracerId: TracerKey;
-  readonly snippetId: SnippetKey;
   readonly structure = Structure.Array;
 
   private readonly lines: BubbleSortCodeRanges;
 
   constructor(language: LanguageType, lines: BubbleSortCodeRanges) {
     this.tracerId = tracerKey(this.algorithm, language);
-    this.snippetId = snippetKey(this.algorithm, language);
     this.lines = lines;
   }
 

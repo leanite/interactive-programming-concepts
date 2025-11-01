@@ -1,22 +1,20 @@
 import CodeViewer from "./CodeViewer";
-import type { LanguageType } from "@types";
-import type { SnippetKey } from "@keys";
-import { useMemo } from "react";
-import { registeredSnippets } from "@factories"
+import type { AlgorithmType, LanguageType } from "@types";
+import type { SnippetPath } from "@registries";
 
 type Props = {
+  algorithm: AlgorithmType
   language: LanguageType;
-  snippetId: SnippetKey;
+  snippet: SnippetPath;
   highlight?: { start: number; end?: number };
 };
 
-export default function CodePanel({ language, snippetId, highlight }: Props) {
-  const snippet = useMemo(() => registeredSnippets.get(snippetId), [snippetId]);
+export default function CodePanel({ algorithm, language, snippet, highlight }: Props) {
 
   return (
     <aside className="bg-neutral-900 rounded-xl p-4 border border-neutral-800">
       <header className="flex items-center justify-between mb-2">
-        <span className="text-sm opacity-80">Snippet: {snippetId}</span>
+        <span className="text-sm opacity-80">Snippet: {algorithm}:{language}</span>
         <span className="text-sm opacity-80">Language: {language}</span>
       </header>
 

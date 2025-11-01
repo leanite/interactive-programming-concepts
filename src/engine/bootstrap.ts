@@ -5,5 +5,4 @@ import { Runner } from "@engines";
 import { buildTracerRegistry, buildRendererRegistry, buildSnippetRegistry } from "@factories";
 
 // Expose a shared Runner instance for future wiring
-buildSnippetRegistry();
-export const runner = new Runner(buildTracerRegistry(), buildRendererRegistry());
+export const runner = new Runner(buildTracerRegistry(), buildRendererRegistry(), buildSnippetRegistry());

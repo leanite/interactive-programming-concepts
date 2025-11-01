@@ -3,8 +3,8 @@ import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
 import type { IVisualRenderer } from "@renderers";
 import type { StructureType } from "types/structures";
-import { TracerRegistry, RendererRegistry } from "@registries";
-import { tracerKey } from "@keys";
+import { TracerRegistry, RendererRegistry, SnippetRegistry, type SnippetPath } from "@registries";
+import { snippetKey, type TracerKey, tracerKey } from "@keys";
 
 /**
  * Runner orchestrates tracing and visual computation via registries.
@@ -13,22 +13,26 @@ import { tracerKey } from "@keys";
 export class Runner {
   private tracers: TracerRegistry;
   private renderers: RendererRegistry;
+  private snippets: SnippetRegistry;
 
-  constructor(tracers: TracerRegistry, renderers: RendererRegistry) {
+  constructor(tracers: TracerRegistry, renderers: RendererRegistry, snippets: SnippetRegistry) {
     this.tracers = tracers;
     this.renderers = renderers;
+    this.snippets = snippets;
   }
 
   /**
    * Produce a full trace for a given algorithm+language combo.
    * The tracer emits steps; language adapter can later refine line ranges.
    */
-  buildTrace<T>(algorithm: AlgorithmType, languageId: LanguageType, initialStructure: T): {
+  buildTrace<T>(algorithm: AlgorithmType, language: LanguageType, initialStructure: T): {
     steps: StepSequence;
     structure: StructureType;
-    snippetId: string;
+    tracerId: TracerKey;
+    snippet: SnippetPath;
   } {
-    const tracer = this.tracers.get<T>(tracerKey(algorithm, languageId));
+    const tracer = this.tracers.get<T>(tracerKey(algorithm, language));
+    const snippet = this.snippets.get(snippetKey(algorithm, language));
 
     // 1) Let the tracer build the semantic steps.
     const rawSteps = tracer.buildTrace(initialStructure);
@@ -40,7 +44,9 @@ export class Runner {
     return {
       steps: mappedSteps,
       structure: tracer.structure, //TODO: Not used
-      snippetId: tracer.tracerId //TODO: Not used
+      tracerId: tracer.tracerId, //TODO: Not used
+
+      snippet: snippet, //TODO: Not used
     };
   }
 

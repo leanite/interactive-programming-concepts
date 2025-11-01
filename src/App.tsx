@@ -11,7 +11,6 @@ import type { ArrayVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
 import { Algorithm } from "@algorithms";
-import { snippetKey, type SnippetKey } from "@keys"
 
 /**
  * Helper to create a fresh random numeric array (1..99) of a given length.
@@ -35,15 +34,15 @@ export default function App() {
   const [steps, setSteps] = React.useState<StepSequence>([]);
 
   // Snippet for the selected language and algorithm
-  const [snippetId, setSnippetId] = React.useState<SnippetKey>(snippetKey(Algorithm.BubbleSort, language));
+  const [snippet, setSnippet] = React.useState<string>("");
 
   // Build or rebuild the step trace whenever the language changes.
   // For now, we keep the Bubble Sort tracer keyed as "bubble-sort:typescript".
   React.useEffect(() => {
-    const { steps, snippetId } = runner.buildTrace(Algorithm.BubbleSort, language, baseValues);
+    const { steps, snippet } = runner.buildTrace(Algorithm.BubbleSort, language, baseValues);
     setSteps(steps);
-    setSnippetId(snippetId as SnippetKey);
-  }, [language, baseValues]);
+    setSnippet(snippet);
+  }, [language, snippet, baseValues]);
 
   // Playback engine (index, play/pause, step, prev, reset, speed).
   const stepRunner = useStepRunner({
@@ -109,7 +108,7 @@ export default function App() {
           <Canvas state={visualState} />
         </section>
 
-        <CodePanel language={language} snippetId={snippetId} highlight={highlight} />
+        <CodePanel algorithm={Algorithm.BubbleSort} language={language} snippet={snippet} highlight={highlight} />
       </main>
     </div>
   );

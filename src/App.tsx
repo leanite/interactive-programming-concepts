@@ -5,12 +5,13 @@ import Canvas from "./components/Canvas";
 import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
 import { useStepRunner } from "./hooks/useStepRunner";
-import { Language, LanguageCatalog, type LanguageType } from "./types/languages";
+import { LanguageCatalog, type LanguageType } from "./types/languages";
 import type { StepSequence } from "./types/step";
 import type { ArrayVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
 import { Algorithm } from "@algorithms";
+import { snippetKey, type SnippetKey } from "@keys"
 
 /**
  * Helper to create a fresh random numeric array (1..99) of a given length.
@@ -33,11 +34,15 @@ export default function App() {
   // Steps produced by the engine (tracer) for the current baseValues and language.
   const [steps, setSteps] = React.useState<StepSequence>([]);
 
+  // Snippet for the selected language and algorithm
+  const [snippetId, setSnippetId] = React.useState<SnippetKey>(snippetKey(Algorithm.BubbleSort, language));
+
   // Build or rebuild the step trace whenever the language changes.
   // For now, we keep the Bubble Sort tracer keyed as "bubble-sort:typescript".
   React.useEffect(() => {
-    const traceInfo = runner.buildTrace(Algorithm.BubbleSort, Language.TypeScript, baseValues);
-    setSteps(traceInfo.steps);
+    const { steps, snippetId } = runner.buildTrace(Algorithm.BubbleSort, language, baseValues);
+    setSteps(steps);
+    setSnippetId(snippetId as SnippetKey);
   }, [language, baseValues]);
 
   // Playback engine (index, play/pause, step, prev, reset, speed).
@@ -104,7 +109,7 @@ export default function App() {
           <Canvas state={visualState} />
         </section>
 
-        <CodePanel language={language} highlight={highlight} />
+        <CodePanel language={language} snippetId={snippetId} highlight={highlight} />
       </main>
     </div>
   );

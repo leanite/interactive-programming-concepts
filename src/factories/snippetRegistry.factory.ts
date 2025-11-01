@@ -7,10 +7,13 @@ import { Language } from "@languages";
 // Raw .txt snippets organized by language folder:
 import bubbleSortTs from "@snippets-dir/typescript/bubble-sort.txt?raw";
 
+const snippetRegistry = new SnippetRegistry();
+
 export function buildSnippetRegistry(): SnippetRegistry {
-    const snippetRegistry = new SnippetRegistry();
 
     snippetRegistry.register(snippetKey(Algorithm.BubbleSort, Language.TypeScript), bubbleSortTs);
 
     return snippetRegistry
 }
+
+export const registeredSnippets = snippetRegistry;

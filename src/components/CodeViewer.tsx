@@ -18,11 +18,11 @@ import type { LanguageType } from "@types"; // <-- shared type
 
 type Props = {
   language: LanguageType;
-  code: string;
+  snippet?: string;
   highlight?: { start: number; end?: number }; // 1-based inclusive range
 };
 
-export default function CodeViewer({ language, code, highlight }: Props) {
+export default function CodeViewer({ language, snippet, highlight }: Props) {
   // Precompute grammar; fallback to TS if missing
   const grammar = useMemo(() => {
     // Guard: ensure grammar exists (e.g., if a language import changes)
@@ -30,7 +30,8 @@ export default function CodeViewer({ language, code, highlight }: Props) {
   }, [language]);
 
   // Split code into individual lines to render gutters + per-line highlight
-  const lines = useMemo(() => code.split("\n"), [code]);
+  const codeText = snippet ?? "";
+  const lines = useMemo(() => codeText.split("\n"), [codeText]);
 
   const start = highlight?.start ?? -1;
   const end = highlight?.end ?? start;

@@ -1,73 +1,27 @@
 import CodeViewer from "./CodeViewer";
 import type { LanguageType } from "@types";
-
-// Example code snippets for each language
-const codeSamples: Record<LanguageType, string> = {
-  java: `public class BubbleSort {
-    public static void bubbleSort(int[] arr) {
-      int n = arr.length;
-      for (int i = 0; i < n-1; i++)
-        for (int j = 0; j < n-i-1; j++)
-          if (arr[j] > arr[j+1]) {
-            int temp = arr[j];
-            arr[j] = arr[j+1];
-            arr[j+1] = temp;
-          }
-    }
-  }`,
-  python: `def bubble_sort(arr):
-    for i in range(len(arr) - 1):
-        for j in range(len(arr) - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-    return arr`,
-  c: `void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n-1; i++)
-      for (int j = 0; j < n-i-1; j++)
-        if (arr[j] > arr[j+1]) {
-          int temp = arr[j];
-          arr[j] = arr[j+1];
-          arr[j+1] = temp;
-        }
-  }`,
-  rust: `pub fn bubble_sort(arr: &mut [i32]) {
-      let n = arr.len();
-      for i in 0..n-1 {
-          for j in 0..n-i-1 {
-              if arr[j] > arr[j+1] {
-                  arr.swap(j, j+1);
-              }
-          }
-      }
-  }`,
-  typescript: `export function bubbleSort(arr: number[]): number[] {
-    const a = [...arr];
-    for (let i = 0; i < a.length - 1; i++) {
-      for (let j = 0; j < a.length - i - 1; j++) {
-        if (a[j] > a[j + 1]) {
-          const tmp = a[j];
-          a[j] = a[j + 1];
-          a[j + 1] = tmp;
-        }
-      }
-    }
-    return a;
-  }`,
-};
+import type { SnippetKey } from "@keys";
+import { useMemo } from "react";
+import { registeredSnippets } from "@factories"
 
 type Props = {
   language: LanguageType;
+  snippetId: SnippetKey;
   highlight?: { start: number; end?: number };
 };
 
-export default function CodePanel({ language, highlight }: Props) {
-  return (
-    <aside className="bg-neutral-900 rounded-xl border border-neutral-800 overflow-hidden">
-      <div className="px-4 py-3 border-b border-neutral-800 text-sm opacity-80">
-        Code ({language})
-      </div>
+export default function CodePanel({ language, snippetId, highlight }: Props) {
+  const snippet = useMemo(() => registeredSnippets.get(snippetId), [snippetId]);
 
-      <CodeViewer language={language} code={codeSamples[language]} highlight={highlight} />
+  return (
+    <aside className="bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+      <header className="flex items-center justify-between mb-2">
+        <span className="text-sm opacity-80">Snippet: {snippetId}</span>
+        <span className="text-sm opacity-80">Language: {language}</span>
+      </header>
+
+      {/* CHANGED: CodeViewer recebe o source pronto */}
+      <CodeViewer language={language} snippet={snippet} highlight={highlight} />
     </aside>
   );
 }

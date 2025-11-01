@@ -10,7 +10,7 @@ import type { StepSequence } from "./types/step";
 import type { ArrayVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
-import { Algorithm } from "@algorithms";
+import { Algorithm, AlgorithmCatalog, type AlgorithmType } from "@algorithms";
 
 /**
  * Helper to create a fresh random numeric array (1..99) of a given length.
@@ -25,6 +25,7 @@ function createRandomArray(length: number): number[] {
 }
 
 export default function App() {
+  const [algorithm, setAlgorithm] = React.useState<AlgorithmType>(AlgorithmCatalog.default);
   const [language, setLanguage] = React.useState<LanguageType>(LanguageCatalog.default);
 
   // Base values for the algorithm visualization (random, created once on mount).
@@ -80,8 +81,13 @@ export default function App() {
     <div className="min-h-screen">
       <TopBar
         language={language}
-        setLanguage={(newLanguage) => {
-          setLanguage(newLanguage);
+        setLanguage={(newLang) => {
+          setLanguage(newLang);
+          stepRunner.reset();
+        }}
+        algorithm={algorithm}                 
+        setAlgorithm={(newAlg) => {
+          setAlgorithm(newAlg);
           stepRunner.reset();
         }}
       />

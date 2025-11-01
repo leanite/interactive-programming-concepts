@@ -13,15 +13,6 @@ export const Language = {
 /** Union type of all language ids. */
 export type LanguageType = (typeof Language)[keyof typeof Language];
 
-/** Names and metadata for each language. */
-export const LanguageNames: Record<LanguageType, { name: string }> = {
-  [Language.Java]: { name: "Java" },
-  [Language.Python]: { name: "Python" },
-  [Language.C]: { name: "C" },
-  [Language.Rust]: { name: "Rust" },
-  [Language.TypeScript]: { name: "TypeScript" },
-} as const;
-  
 /**
  * LanguageCatalog: static, UI-oriented registry of supported languages.
  * Keeps default id, display names, and validation utilities.
@@ -29,9 +20,16 @@ export const LanguageNames: Record<LanguageType, { name: string }> = {
 export class LanguageCatalog {
   static readonly default: LanguageType = Language.TypeScript;
   static readonly all: readonly LanguageType[] = Object.values(Language);
+  private static readonly languageNames: Record<LanguageType, { name: string }> = {
+    [Language.Java]: { name: "Java" },
+    [Language.Python]: { name: "Python" },
+    [Language.C]: { name: "C" },
+    [Language.Rust]: { name: "Rust" },
+    [Language.TypeScript]: { name: "TypeScript" },
+  }
 
   static label(id: LanguageType): string {
-    return LanguageNames[id].name;
+    return LanguageCatalog.languageNames[id].name;
   }
 
   static isValid(value: string): value is LanguageType {

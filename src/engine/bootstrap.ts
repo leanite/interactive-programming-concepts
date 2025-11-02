@@ -2,7 +2,7 @@
 // and exposes a shared Runner. This file does NOT wire UI; it only prepares the engine.
 
 import { Runner } from "@engines";
-import { buildTracerRegistry, buildRendererRegistry, buildSnippetRegistry } from "@factories";
+import { buildTracerRegistry, buildRendererRegistry, buildSnippetRegistry, buildInputRegistry } from "@factories";
 
 // Expose a shared Runner instance for future wiring
-export const runner = new Runner(buildTracerRegistry(), buildRendererRegistry(), buildSnippetRegistry());
+export const runner = new Runner(buildTracerRegistry(), buildRendererRegistry(), buildSnippetRegistry(), buildInputRegistry());

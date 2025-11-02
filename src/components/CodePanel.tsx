@@ -1,25 +1,21 @@
 import CodeViewer from "./CodeViewer";
-import type { AlgorithmType, LanguageType } from "@types";
-import type { SnippetPath } from "@registries";
+import type { Snippet } from "@snippet";
 
 type Props = {
-  algorithm: AlgorithmType
-  language: LanguageType;
-  snippet: SnippetPath;
+  snippet: Snippet;
   highlight?: { start: number; end?: number };
 };
 
-export default function CodePanel({ algorithm, language, snippet, highlight }: Props) {
+export default function CodePanel({ snippet, highlight }: Props) {
 
   return (
     <aside className="bg-neutral-900 rounded-xl p-4 border border-neutral-800">
       <header className="flex items-center justify-between mb-2">
-        <span className="text-sm opacity-80">Snippet: {algorithm}:{language}</span>
-        <span className="text-sm opacity-80">Language: {language}</span>
+        <span className="text-sm opacity-80">Snippet: {snippet.algorithm}:{snippet.language}</span>
+        <span className="text-sm opacity-80">Language: {snippet.language}</span>
       </header>
 
-      {/* CHANGED: CodeViewer recebe o source pronto */}
-      <CodeViewer language={language} snippet={snippet} highlight={highlight} />
+      <CodeViewer snippet={snippet} highlight={highlight} />
     </aside>
   );
 }

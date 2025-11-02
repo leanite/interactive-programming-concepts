@@ -3,8 +3,8 @@ import type { Step, StepSequence } from "@types";
 import type { VisualOperation } from "@operations";
 import type { IVisualRenderer } from "@renderers";
 import type { StructureType } from "types/structures";
-import { TracerRegistry, RendererRegistry, SnippetRegistry, type SnippetPath } from "@registries";
-import { snippetKey, type TracerKey, tracerKey } from "@keys";
+import { TracerRegistry, RendererRegistry, SnippetRegistry, InputRegistry } from "@registries";
+import { snippetKey, tracerKey } from "@keys";
 
 /**
  * Runner orchestrates tracing and visual computation via registries.
@@ -14,40 +14,39 @@ export class Runner {
   private tracers: TracerRegistry;
   private renderers: RendererRegistry;
   private snippets: SnippetRegistry;
+  private inputs: InputRegistry;
 
-  constructor(tracers: TracerRegistry, renderers: RendererRegistry, snippets: SnippetRegistry) {
+  constructor(tracers: TracerRegistry, renderers: RendererRegistry, snippets: SnippetRegistry, inputs: InputRegistry) {
     this.tracers = tracers;
     this.renderers = renderers;
     this.snippets = snippets;
+    this.inputs = inputs;
+  }
+
+  generateInput<T>(algorithm: AlgorithmType, options?: any): T {
+    return this.inputs.generateInputFor<T>(algorithm, options);
+  }
+
+  getSnippet(algorithm: AlgorithmType, language: LanguageType) {
+    return this.snippets.get(snippetKey(algorithm, language));
   }
 
   /**
-   * Produce a full trace for a given algorithm+language combo.
+   * Produce a full trace for a given algorithm+language combo using the provided input.
    * The tracer emits steps; language adapter can later refine line ranges.
    */
-  buildTrace<T>(algorithm: AlgorithmType, language: LanguageType, initialStructure: T): {
-    steps: StepSequence;
-    structure: StructureType;
-    tracerId: TracerKey;
-    snippet: SnippetPath;
-  } {
+  buildTrace<T>(algorithm: AlgorithmType, language: LanguageType, input: T): StepSequence {
     const tracer = this.tracers.get<T>(tracerKey(algorithm, language));
     const snippet = this.snippets.get(snippetKey(algorithm, language));
 
-    // 1) Let the tracer build the semantic steps.
-    const rawSteps = tracer.buildTrace(initialStructure);
+    // 1) Let the tracer build the semantic steps for the supplied input.
+    const rawSteps = tracer.buildTrace(input, snippet.range);
 
     // 2) Optionally, a future pass could map semantic labels to precise line ranges using the adapter.
     //    At this commit, we assume steps already carry { lineStart, lineEnd }.
     const mappedSteps: StepSequence = rawSteps.map((step: Step) => step);
 
-    return {
-      steps: mappedSteps,
-      structure: tracer.structure, //TODO: Not used
-      tracerId: tracer.tracerId, //TODO: Not used
-
-      snippet: snippet, //TODO: Not used
-    };
+    return mappedSteps;
   }
 
   /**

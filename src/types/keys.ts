@@ -12,3 +12,9 @@ export type SnippetKey = `${string}:${string}`; // example: "bubble-sort:typescr
 export function snippetKey(algorithm: AlgorithmType, language: LanguageType): SnippetKey {
     return `${algorithm}:${language}`;
 }
+
+export type UniqueKey = `${string}:${string}`; // example: "bubble-sort:typescript"
+/** Compose "<algorithmId>:<languageId>" in a single place. */
+export function formatUniqueKey(algorithm: AlgorithmType, language: LanguageType): SnippetKey {
+    return `${algorithm}:${language}`;
+}

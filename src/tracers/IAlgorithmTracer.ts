@@ -1,6 +1,7 @@
 import type { StructureType } from "@structures";
 import type { StepSequence } from "@types";
 import type { TracerKey } from "@keys";
+import type { SnippetRange } from "@snippet";
 
 /**
  * Algorithm tracer: given an initial structure, produce a deterministic trace
@@ -9,14 +10,14 @@ import type { TracerKey } from "@keys";
  * The tracer is agnostic of UI and canvas; it only emits semantic steps.
  */
 export interface IAlgorithmTracer<T> {
-  /** Generate the full step-by-step trace for this initial structure. */
-  buildTrace(initial: T): StepSequence;
-
+  /** Generate the full step-by-step trace for an input structure. */
+  buildTrace(input: T, snippetByLanguageRange: SnippetRange): StepSequence;
+  
   /**
-   * Stable snippet id for the code viewer (e.g., "bubble-sort:typescript").
-   * It allows the UI to choose the proper source snippet to highlight.
+   * Stable tracer id for the code viewer (e.g., "bubble-sort:typescript").
+   * It allows to choose the proper tracer to use a snippet to highlight.
    */
-  readonly tracerId: TracerKey;
+  readonly id: TracerKey;
 
   /**
    * Structure kind consumed by a visual renderer (e.g., "array", "tree", "graph").

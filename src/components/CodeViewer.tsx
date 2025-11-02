@@ -1,5 +1,6 @@
-import { useMemo } from "react";
 import Prism from "prismjs";
+import { useMemo } from "react";
+import type { Snippet } from "@snippet";
 
 // Base dependency for C/Java languages
 import "prismjs/components/prism-clike";
@@ -14,23 +15,20 @@ import "prismjs/components/prism-rust";
 // Theme
 import "prismjs/themes/prism-tomorrow.css";
 
-import type { LanguageType } from "@types"; // <-- shared type
-
 type Props = {
-  language: LanguageType;
-  snippet?: string;
+  snippet: Snippet;
   highlight?: { start: number; end?: number }; // 1-based inclusive range
 };
 
-export default function CodeViewer({ language, snippet, highlight }: Props) {
+export default function CodeViewer({ snippet, highlight }: Props) {
   // Precompute grammar; fallback to TS if missing
   const grammar = useMemo(() => {
     // Guard: ensure grammar exists (e.g., if a language import changes)
-    return Prism.languages[language] ?? Prism.languages.typescript;
-  }, [language]);
+    return Prism.languages[snippet.language] ?? Prism.languages.typescript;
+  }, [snippet.language]);
 
   // Split code into individual lines to render gutters + per-line highlight
-  const codeText = snippet ?? "";
+  const codeText = snippet.text ?? "";
   const lines = useMemo(() => codeText.split("\n"), [codeText]);
 
   const start = highlight?.start ?? -1;
@@ -43,7 +41,7 @@ export default function CodeViewer({ language, snippet, highlight }: Props) {
       aria-label="Code viewer with line numbers"
     >
       {/* Using a semantic <pre> but we render lines ourselves for better control */}
-      <pre className={`language-${language} m-0`}>
+      <pre className={`language-${snippet.language} m-0`}>
         <code className="block">
           {lines.map((line, idx) => {
             const lineNum = idx + 1;
@@ -70,7 +68,7 @@ export default function CodeViewer({ language, snippet, highlight }: Props) {
                   <span
                     // NOTE: Highlight per-line to preserve alignment with gutter
                     dangerouslySetInnerHTML={{
-                      __html: Prism.highlight(line || " ", grammar, language),
+                      __html: Prism.highlight(line || " ", grammar, snippet.language),
                     }}
                   />
                 </div>

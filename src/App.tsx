@@ -10,40 +10,37 @@ import type { StepSequence } from "./types/step";
 import type { ArrayVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
-import { Algorithm, AlgorithmCatalog, type AlgorithmType } from "@algorithms";
-
-/**
- * Helper to create a fresh random numeric array (1..99) of a given length.
- * This is intentionally non-deterministic for now (no fixed seed).
- */
-function createRandomArray(length: number): number[] {
-  const values: number[] = [];
-  for (let index = 0; index < length; index++) {
-    values.push(Math.floor(Math.random() * 99) + 1);
-  }
-  return values;
-}
+import { AlgorithmCatalog, type AlgorithmType } from "@algorithms";
+import type { Snippet } from "@snippet";
 
 export default function App() {
   const [algorithm, setAlgorithm] = React.useState<AlgorithmType>(AlgorithmCatalog.default);
   const [language, setLanguage] = React.useState<LanguageType>(LanguageCatalog.default);
 
   // Base values for the algorithm visualization (random, created once on mount).
-  const [baseValues, setBaseValues] = React.useState<number[]>(() => createRandomArray(8));
+  const [baseValues, setBaseValues] = React.useState<number[]>(() =>
+    runner.generateInput<number[]>(AlgorithmCatalog.default)
+  );
 
   // Steps produced by the engine (tracer) for the current baseValues and language.
   const [steps, setSteps] = React.useState<StepSequence>([]);
 
   // Snippet for the selected language and algorithm
-  const [snippet, setSnippet] = React.useState<string>("");
+  const [snippet, setSnippet] = React.useState<Snippet>(runner.getSnippet(algorithm, language));
 
   // Build or rebuild the step trace whenever the language changes.
   // For now, we keep the Bubble Sort tracer keyed as "bubble-sort:typescript".
   React.useEffect(() => {
-    const { steps, snippet } = runner.buildTrace(Algorithm.BubbleSort, language, baseValues);
-    setSteps(steps);
-    setSnippet(snippet);
-  }, [language, snippet, baseValues]);
+    setSnippet(runner.getSnippet(algorithm, language));
+    setSteps(runner.buildTrace(algorithm, language, baseValues));
+  }, [algorithm, language, baseValues]);
+
+  React.useEffect(() => {
+    const generated = runner.generateInput<number[]>(algorithm);
+    if (Array.isArray(generated)) {
+      setBaseValues(generated);
+    }
+  }, [algorithm]);
 
   // Playback engine (index, play/pause, step, prev, reset, speed).
   const stepRunner = useStepRunner({
@@ -73,9 +70,9 @@ export default function App() {
   }, [baseValues, steps, stepRunner.index]);
 
   const handleRandomize = React.useCallback(() => {
-    stepRunner.reset();                 // ensure playback state is consistent
-    setBaseValues(createRandomArray(8)); // triggers trace rebuild via effect
-  }, [stepRunner]);
+    stepRunner.reset(); // ensure playback state is consistent
+    setBaseValues(runner.generateInput<number[]>(algorithm)); // triggers trace rebuild via effect
+  }, [algorithm, stepRunner]);
 
   return (
     <div className="min-h-screen">
@@ -114,7 +111,7 @@ export default function App() {
           <Canvas state={visualState} />
         </section>
 
-        <CodePanel algorithm={Algorithm.BubbleSort} language={language} snippet={snippet} highlight={highlight} />
+        <CodePanel snippet={snippet} highlight={highlight} />
       </main>
     </div>
   );

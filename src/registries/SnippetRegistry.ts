@@ -1,20 +1,18 @@
-import type { SnippetKey } from "@keys";
+import type { UniqueKey } from "@keys";
+import type { Snippet } from "@snippet";
 
-export type SnippetPath = string;
 
 /** Minimal registry for snippet sources (plain text). */
 export class SnippetRegistry {
-  private readonly map = new Map<SnippetKey, SnippetPath>();
+  private readonly map = new Map<UniqueKey, Snippet>();
 
-  register(key: SnippetKey, source: SnippetPath): void {
-    this.map.set(key, source);
+  register(key: UniqueKey, snippet: Snippet): void {
+    this.map.set(key, snippet);
   }
 
-  get(key: SnippetKey): SnippetPath {
-    const code = this.map.get(key);
-    if (!code) {
-      return `// Snippet not found: ${key}\n// Register it in snippet registry.`;
-    }
-    return code;
+  get(key: UniqueKey): Snippet {
+    const snippet = this.map.get(key);
+    if (!snippet) throw new Error(`Snippet not found: ${key}`);
+    return snippet;
   }
 }

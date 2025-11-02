@@ -4,9 +4,10 @@ import { Algorithm, type LanguageType, type StepSequence } from "@types";
 import { Operation } from "@operations";
 import { VisualStepBuilder } from "./VisualStepBuilder";
 import { Structure } from "@structures";
+import type { SnippetRange } from "@snippet";
 
 /** Code range map required by this tracer (algorithm-specific shape). */
-export type BubbleSortCodeRanges = {
+export type BubbleSortCodeRange = SnippetRange & {
   signature: { lineStart: number; lineEnd?: number };
   outerLoop: { lineStart: number; lineEnd?: number };
   innerLoop: { lineStart: number; lineEnd?: number };
@@ -22,20 +23,17 @@ export type BubbleSortCodeRanges = {
  */
 export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
   readonly algorithm = Algorithm.BubbleSort;
-  readonly tracerId: TracerKey;
+  readonly id: TracerKey;
   readonly structure = Structure.Array;
 
-  private readonly lines: BubbleSortCodeRanges;
-
-  constructor(language: LanguageType, lines: BubbleSortCodeRanges) {
-    this.tracerId = tracerKey(this.algorithm, language);
-    this.lines = lines;
+  constructor(language: LanguageType) {
+    this.id = tracerKey(this.algorithm, language);
   }
 
-  buildTrace(initial: number[]): StepSequence {
-    const array = [...initial];
+  buildTrace(input: number[], snippetByLanguageRange: BubbleSortCodeRange): StepSequence {
+    const array = [... input];
     const stepBuilder = new VisualStepBuilder();
-    const L = this.lines;
+    const L = snippetByLanguageRange; //Testar pra ver sumir com esse L depois de tudo
 
     stepBuilder.add(L.signature, "Initialize bubble sort");
 

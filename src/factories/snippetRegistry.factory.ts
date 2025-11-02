@@ -8,12 +8,17 @@ import { bubbleSortTypeScriptRanges } from "@snippets-file";
 
 // Raw .txt snippets organized by language folder:
 import bubbleSortTypescriptSnippetText from "@snippets-dir/typescript/bubble-sort.txt?raw";
+import selectionSortTypescriptSnippetText from "@snippets-dir/typescript/selection-sort.txt?raw";
+
+import { selectionSortTypeScriptRanges } from "@tracers";
 
 export function buildSnippetRegistry(): SnippetRegistry {
     const snippetRegistry = new SnippetRegistry();
 
     snippetRegistry.register(formatUniqueKey(Algorithm.BubbleSort, Language.TypeScript), 
         new Snippet(Algorithm.BubbleSort, Language.TypeScript, bubbleSortTypescriptSnippetText, bubbleSortTypeScriptRanges));
-        //TODO: definir como o Range entra aqui e sucesso! não acho que vale a pena criar RangeRegistry
+    
+    snippetRegistry.register(formatUniqueKey(Algorithm.SelectionSort, Language.TypeScript), 
+        new Snippet(Algorithm.SelectionSort, Language.TypeScript, selectionSortTypescriptSnippetText, selectionSortTypeScriptRanges));
     return snippetRegistry
 }

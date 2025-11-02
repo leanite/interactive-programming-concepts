@@ -1,7 +1,7 @@
 // Creates an integer array for Bubble Sort.
 // Options allow future UI to control size and value bounds.
 // - `unique: true` will try to avoid duplicates (best-effort).
-export function createBubbleSortInput(options?: { size?: number; min?: number; max?: number; unique?: boolean; }): number[] {
+export function createArraySortInput(options?: { size?: number; min?: number; max?: number; unique?: boolean; }): number[] {
     const size = Math.max(1, Math.floor(options?.size ?? 8));
     const min = Math.floor(options?.min ?? 1);
     const max = Math.floor(options?.max ?? 99);

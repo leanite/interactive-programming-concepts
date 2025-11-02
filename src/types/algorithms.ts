@@ -1,6 +1,7 @@
 // Canonical algorithm identifiers. Extend as new algorithms are added.
 export const Algorithm = {
     BubbleSort: "bubble-sort",
+    SelectionSort: "selection-sort"
     // BstSearch: "bst-search",
     // BstInsert: "bst-insert",
 } as const;
@@ -16,6 +17,7 @@ export class AlgorithmCatalog {
     static readonly all: readonly AlgorithmType[] = Object.values(Algorithm);
     private static readonly algorithmNames: Record<AlgorithmType, { name: string }> = {
         [Algorithm.BubbleSort]: { name: "Bubble Sort" },
+        [Algorithm.SelectionSort] : { name: "Selection Sort"},
         // [Algorithm.BstSearch]: { name: "BST Search" },
         // [Algorithm.BstInsert]: { name: "BST Insert" },
     }

@@ -1,0 +1,17 @@
+function selectionSort(arr: number[]): number[] {
+  const a = arr.slice();
+  for (let i = 0; i < a.length - 1; i++) {
+    let min = i;
+    for (let j = i + 1; j < a.length; j++) {
+      if (a[j] < a[min]) {
+        min = j;
+      }
+    }
+    if (min !== i) {
+      const tmp = a[i];
+      a[i] = a[min];
+      a[min] = tmp;
+    }
+  }
+  return a;
+}

@@ -1,11 +1,12 @@
 import { Algorithm } from "@algorithms";
 import { InputRegistry } from "@registries";
-import { createBubbleSortInput } from "@inputs";
+import { createArraySortInput } from "@inputs";
 
 export function buildInputRegistry(): InputRegistry {
     const inputRegistry = new InputRegistry();
 
-    inputRegistry.registerInputGenerator<number[]>(Algorithm.BubbleSort, createBubbleSortInput);
+    inputRegistry.registerInputGenerator<number[]>(Algorithm.BubbleSort, createArraySortInput);
+    inputRegistry.registerInputGenerator<number[]>(Algorithm.SelectionSort, createArraySortInput);
     
     return inputRegistry;
 }

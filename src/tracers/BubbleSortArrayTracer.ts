@@ -30,18 +30,17 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
     this.id = tracerKey(this.algorithm, language);
   }
 
-  buildTrace(input: number[], snippetByLanguageRange: BubbleSortCodeRange): StepSequence {
+  buildTrace(input: number[], snippetLanguageRange: BubbleSortCodeRange): StepSequence {
     const array = [... input];
     const stepBuilder = new VisualStepBuilder();
-    const L = snippetByLanguageRange; //Testar pra ver sumir com esse L depois de tudo
 
-    stepBuilder.add(L.signature, "Initialize bubble sort");
+    stepBuilder.add(snippetLanguageRange.signature, "Initialize bubble sort");
 
     for (let i = 0; i < array.length - 1; i++) {
-      stepBuilder.add(L.outerLoop, `Outer loop i = ${i}`);
+      stepBuilder.add(snippetLanguageRange.outerLoop, `Outer loop i = ${i}`);
       for (let j = 0; j < array.length - i - 1; j++) {
         stepBuilder.add(
-          L.innerLoop,
+          snippetLanguageRange.innerLoop,
           `Compare indices ${j} and ${j + 1}`,
           [{ operation: Operation.ArrayCompare, i: j, j: j + 1 }]
         );
@@ -52,17 +51,17 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
           array[j + 1] = temp;
 
           stepBuilder.add(
-            L.swapBlock,
+            snippetLanguageRange.swapBlock,
             `Swap ${j} and ${j + 1}`,
             [{ operation: Operation.ArraySwap, i: j, j: j + 1 }]
           );
         } else {
-          stepBuilder.add(L.compare, "No swap needed");
+          stepBuilder.add(snippetLanguageRange.compare, "No swap needed");
         }
       }
     }
 
-    stepBuilder.add(L.returnStmt, "Return sorted array");
+    stepBuilder.add(snippetLanguageRange.returnStmt, "Return sorted array");
     return stepBuilder.build();
   }
 }

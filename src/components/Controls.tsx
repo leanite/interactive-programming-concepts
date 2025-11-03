@@ -23,55 +23,66 @@ export default function Controls({
   const sliderValue = msToSlider(speedMs);
 
   return (
-    <div className="bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+    <div className="theme-panel p-4">
       <div className="flex flex-wrap items-center gap-2">
         {/* Randomize button */}
         <button
-          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          type="button"
           onClick={onRandomize}
+          className="px-3 py-1.5 rounded-lg border"
+          style={{ background: "var(--panel-bg)", borderColor: "var(--panel-border)", color: "var(--fg-default)" }}
         >
           Randomize
         </button>
+
         {/* Reset button */}
         <button
-          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          type="button"
           onClick={onReset}
+          className="px-3 py-1.5 rounded-lg border"
+          style={{ background: "var(--panel-bg)", borderColor: "var(--panel-border)", color: "var(--fg-default)" }}
         >
           Reset
         </button>
 
         {/* Prev */}
         <button
-          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          type="button"
           onClick={onBack}
           disabled={isPlaying}
           title={isPlaying ? "Pause to navigate manually" : "Go back one step"}
+          className="px-3 py-1.5 rounded-lg border disabled:opacity-60"
+          style={{ background: "var(--panel-bg)", borderColor: "var(--panel-border)", color: "var(--fg-default)" }}
         >
           Prev
         </button>
 
         {/* Play / Pause */}
         <button
-          className="px-3 py-1.5 rounded-lg bg-blue-500/90 hover:bg-blue-500"
+          type="button"
           onClick={onPlayPause}
+          className="px-3 py-1.5 rounded-lg"
+          style={{ background: "var(--accent)", color: "#fff" }}
         >
           {isPlaying ? "Pause" : "Play"}
         </button>
 
         {/* Step forward */}
         <button
-          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700"
+          type="button"
           onClick={onStep}
           disabled={isPlaying}
           title={isPlaying ? "Pause to step manually" : "Step once"}
+          className="px-3 py-1.5 rounded-lg border disabled:opacity-60"
+          style={{ background: "var(--panel-bg)", borderColor: "var(--panel-border)", color: "var(--fg-default)" }}
         >
           Step
         </button>
 
-        <div className="w-px h-6 bg-neutral-800 mx-2" />
+        <div className="mx-2" style={{ width: 1, height: 24, background: "var(--panel-border)" }} />
 
         {/* Speed control */}
-        <label className="text-sm opacity-80 flex items-center gap-2">
+        <label className="text-sm opacity-80 flex items-center gap-2" style={{ color: "var(--fg-default)" }}>
           <span>Speed</span>
           <input
             type="range"
@@ -80,17 +91,9 @@ export default function Controls({
             value={sliderValue}
             onChange={(e) => onSpeedChange(sliderToMs(Number(e.target.value)))}
             className="align-middle"
+            style={{ accentColor: "var(--accent)" }}
           />
         </label>
-
-        {/* Algorithm placeholder select (still static) */}
-        <div className="w-px h-6 bg-neutral-800 mx-2" />
-        <select className="bg-neutral-800 border border-neutral-700 rounded-md px-2 py-1 text-sm">
-          <option>Bubble Sort</option>
-          <option>Insertion Sort</option>
-          <option>Stack</option>
-          <option>Queue</option>
-        </select>
       </div>
     </div>
   );

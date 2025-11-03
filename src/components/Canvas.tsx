@@ -2,11 +2,34 @@ import React from "react";
 import type { ArrayVisualizationState } from "@types";
 
 /**
+ * Local hook: increments a counter whenever <html data-theme="..."> changes.
+ * This lets the Canvas re-render colors on theme toggle even if the state is the same.
+ */
+function useThemeVersion(): number {
+  const [ver, setVer] = React.useState(0);
+
+  React.useEffect(() => {
+    const el = document.documentElement;
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === "attributes" && m.attributeName === "data-theme") {
+          setVer((v) => v + 1);
+        }
+      }
+    });
+    observer.observe(el, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return ver;
+}
+
+/**
  * Canvas component that renders 1D array as vertical bars.
- * Now shows:
+ * Shows:
  * - value labels above each bar
  * - index labels below each bar
- * It also highlights the focused indices if present in `state.focus`.
+ * Highlights focused indices if present in `state.focus`.
  */
 type Props = {
   state: ArrayVisualizationState;
@@ -14,6 +37,7 @@ type Props = {
 
 export default function Canvas({ state }: Props) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const themeVersion = useThemeVersion(); // NEW: triggers redraw on theme change
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,13 +59,12 @@ export default function Canvas({ state }: Props) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     drawArrayCanvas(ctx, cssWidth, cssHeight, state);
-  }, [state]);
+  }, [state, themeVersion]); // NEW: redraw when theme changes
 
   return (
-    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-2">
+    <div className="theme-panel p-2">
       <canvas
         ref={canvasRef}
-        // These CSS sizes control the layout box; backing store is adjusted by DPR above.
         style={{ width: "100%", height: 280 }}
       />
     </div>
@@ -61,37 +84,45 @@ function drawArrayCanvas(
   const values = state.values;
   const n = values.length;
   ctx.clearRect(0, 0, width, height);
-
   if (n === 0) return;
 
+  // Resolve theme colors from <html data-theme="...">
+  const styles = getComputedStyle(document.documentElement);
+  const colorBar   = (styles.getPropertyValue("--muted").trim() || "#6b7280");
+  const colorFocus = (styles.getPropertyValue("--accent").trim() || "#60a5fa");
+  const colorText  = (styles.getPropertyValue("--fg-default").trim() || "#e5e7eb");
+  const colorIndex = (styles.getPropertyValue("--muted").trim() || "rgba(229,231,235,0.7)");
+
   const maxValue = Math.max(...values);
-  const barWidth = width / n - 6;
-  const baseY = height - 25; // leave room for index labels
+  const cellWidth = width / n;
+  const barWidth = cellWidth * 0.4; // thinner bars
+  const gap = (cellWidth - barWidth) / 2;
+  const baseY = height - 25; // room for index labels
 
   const focus1 = state.focus?.i1;
   const focus2 = state.focus?.i2;
 
+  ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  ctx.textAlign = "center";
+
   for (let i = 0; i < n; i++) {
     const value = values[i];
-    const barHeight = (value / maxValue) * (height - 50); // top padding for value labels
-    const x = i * (barWidth + 6) + 3;
+    const barHeight = (value / maxValue) * (height - 50); // room for value labels
+    const x = i * cellWidth + gap;
     const y = baseY - barHeight;
 
-    // pick color based on focus
-    ctx.fillStyle =
-      i === focus1 || i === focus2 ? "#60a5fa" : "#6b7280";
+    // bar
+    ctx.fillStyle = (i === focus1 || i === focus2) ? colorFocus : colorBar;
     ctx.fillRect(x, y, barWidth, barHeight);
 
     // value above bar
-    ctx.fillStyle = "#e5e7eb";
-    ctx.font = "12px monospace";
-    ctx.textAlign = "center";
+    ctx.fillStyle = colorText;
     ctx.textBaseline = "bottom";
-    ctx.fillText(String(value), x + barWidth / 2, y - 2);
+    ctx.fillText(String(value), x + barWidth / 2, y - 3);
 
     // index below bar
     ctx.textBaseline = "top";
-    ctx.fillStyle = "rgba(229,231,235,0.7)";
+    ctx.fillStyle = colorIndex;
     ctx.fillText(String(i), x + barWidth / 2, baseY + 6);
   }
 }

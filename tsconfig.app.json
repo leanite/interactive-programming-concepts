@@ -19,6 +19,7 @@
       "@structures": ["types/structures.ts"],
       "@snippet": ["types/snippet.ts"],
       "@engines": ["engine/index.ts"],
+      "@hooks": ["hooks/index.ts"],
       "@factories": ["factories/index.ts"],
       "@registries": ["registries/index.ts"],
       "@renderers": ["renderers/index.ts"],

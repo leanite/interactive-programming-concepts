@@ -1,0 +1,71 @@
+/* Base theme variables. We'll progressively migrate components to use them. */
+:root[data-theme="dark"] {
+    --bg-app: #0a0a0a;
+    --fg-default: #e5e7eb;          /* neutral-200 */
+    --panel-bg: #111827;            /* neutral-900-ish */
+    --panel-border: #1f2937;        /* neutral-800 */
+    --muted: rgba(229, 231, 235, 0.7);
+    --accent: #60a5fa;              /* blue-400 */
+}
+  
+:root[data-theme="light"] {
+    --bg-app: #ffffff;
+    --fg-default: #0b0f19;          /* near-black */
+    --panel-bg: #f9fafb;            /* gray-50 */
+    --panel-border: #e5e7eb;        /* gray-200 */
+    --muted: #6b7280;               /* gray-500 */
+    --accent: #2563eb;              /* blue-600 */
+}
+  
+  /* App background + default text color */
+html, body, #root {
+    background: var(--bg-app);
+    color: var(--fg-default);
+}
+  
+.theme-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 0.75rem; /* ~ rounded-xl */
+}
+
+.select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+  
+.themed-select {
+    appearance: none;                /* remove native arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: var(--panel-bg);
+    color: var(--fg-default);
+    border: 1px solid var(--panel-border);
+    border-radius: 0.5rem;           /* ~ rounded-lg */
+    padding: 0.375rem 2rem 0.375rem 0.5rem; /* right padding for chevron */
+    font-size: 0.875rem;             /* text-sm */
+    line-height: 1.25rem;
+    cursor: pointer;
+}
+  
+.themed-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+  
+.select-chevron {
+    position: absolute;
+    right: 0.5rem;
+    pointer-events: none;
+    width: 0.9rem;
+    height: 0.9rem;
+    opacity: 0.7;
+    fill: var(--fg-default);
+}
+  
+.themed-select option {
+    background: var(--panel-bg);
+    color: var(--fg-default);
+}

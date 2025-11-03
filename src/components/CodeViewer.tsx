@@ -12,8 +12,9 @@ import "prismjs/components/prism-java";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-rust";
 
-// Theme
+// Theme (Prism)
 import "prismjs/themes/prism-tomorrow.css";
+import "../ui/styles/prism-theme.css";
 
 type Props = {
   snippet: Snippet;
@@ -23,11 +24,9 @@ type Props = {
 export default function CodeViewer({ snippet, highlight }: Props) {
   // Precompute grammar; fallback to TS if missing
   const grammar = useMemo(() => {
-    // Guard: ensure grammar exists (e.g., if a language import changes)
     return Prism.languages[snippet.language] ?? Prism.languages.typescript;
   }, [snippet.language]);
 
-  // Split code into individual lines to render gutters + per-line highlight
   const codeText = snippet.text ?? "";
   const lines = useMemo(() => codeText.split("\n"), [codeText]);
 
@@ -39,6 +38,7 @@ export default function CodeViewer({ snippet, highlight }: Props) {
       className="relative font-mono text-sm overflow-auto"
       role="region"
       aria-label="Code viewer with line numbers"
+      style={{ color: "var(--fg-default)" }}
     >
       {/* Using a semantic <pre> but we render lines ourselves for better control */}
       <pre className={`language-${snippet.language} m-0`}>
@@ -48,17 +48,16 @@ export default function CodeViewer({ snippet, highlight }: Props) {
             const active = lineNum >= start && lineNum <= end;
 
             return (
-              <div
-                key={idx}
-                className={`flex gap-3 pr-4 whitespace-pre leading-6 ${
-                  active ? "bg-cyan-500/10" : ""
-                }`}
-              >
+                <div
+                  key={idx}
+                  className={`flex gap-3 pr-4 whitespace-pre leading-6 ${active ? "line-active" : ""}`}
+                >
                 {/* Gutter: line number column (decorative) */}
                 <div
-                  className="select-none text-right w-10 shrink-0 pl-3 pr-1 text-neutral-500"
+                  className="select-none text-right w-10 shrink-0 pl-3 pr-1"
                   aria-hidden="true"
                   title={`Line ${lineNum}`}
+                  style={{ color: "var(--muted)" }}
                 >
                   {lineNum}
                 </div>

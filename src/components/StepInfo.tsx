@@ -7,23 +7,18 @@ type Props = {
 export default function StepInfo({ index, total, note }: Props) {
   // Compute 1-based label for display
   const label = total > 0 ? `Step ${index + 1} / ${total}` : "No steps loaded";
+  const safeNote = note && note.trim().length > 0 ? note : "No note for this step.";
 
   return (
-    <div
-      className="bg-neutral-900 rounded-xl p-3 border border-neutral-800"
-      role="status"
-      aria-live="polite"
-    >
+    <div className="theme-panel p-3" role="status" aria-live="polite">
       {/* Step counter */}
-      <div className="text-sm text-neutral-300 mb-2">{label}</div>
+      <div className="text-sm mb-2" style={{ color: "var(--muted)" }}>
+        {label}
+      </div>
 
       {/* Step note: supports multiline text with normal wrapping */}
-      <div
-        className="text-sm text-neutral-200 leading-relaxed whitespace-pre-line"
-      >
-        {note && note.trim().length > 0
-          ? note
-          : "No note for this step."}
+      <div className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "var(--fg-default)" }}>
+        {safeNote}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ export default defineConfig({
       '@structures': resolve(rootDir, 'src/types/structures.ts'),
       '@snippet': resolve(rootDir, 'src/types/snippet.ts'),
       '@engines': resolve(rootDir, 'src/engine/index.ts'),
+      '@hooks': resolve(rootDir, 'src/hooks/index.ts'),
       '@factories': resolve(rootDir, 'src/factories/index.ts'),
       '@inputs': resolve(rootDir, 'src/inputs/index.ts'),
       '@registries': resolve(rootDir, 'src/registries/index.ts'),

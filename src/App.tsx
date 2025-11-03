@@ -12,10 +12,12 @@ import { runner } from "./engine/bootstrap";
 import { Structure } from "@structures";
 import { AlgorithmCatalog, type AlgorithmType } from "@algorithms";
 import type { Snippet } from "@snippet";
+import { useTheme } from "@hooks";
 
 export default function App() {
   const [algorithm, setAlgorithm] = React.useState<AlgorithmType>(AlgorithmCatalog.default);
   const [language, setLanguage] = React.useState<LanguageType>(LanguageCatalog.default);
+  const [theme, toggleTheme] = useTheme(); 
 
   // Base values for the algorithm visualization (random, created once on mount).
   const [baseValues, setBaseValues] = React.useState<number[]>(() =>
@@ -87,6 +89,8 @@ export default function App() {
           setAlgorithm(newAlg);
           stepRunner.reset();
         }}
+        theme={theme}                     
+        onToggleTheme={() => toggleTheme()}
       />
 
       <main className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-4 p-4 sm:p-6">

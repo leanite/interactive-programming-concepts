@@ -34,7 +34,6 @@ html, body, #root {
     display: inline-flex;
     align-items: center;
 }
-  
 .themed-select {
     appearance: none;                /* remove native arrow */
     -webkit-appearance: none;
@@ -48,13 +47,11 @@ html, body, #root {
     line-height: 1.25rem;
     cursor: pointer;
 }
-  
 .themed-select:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
 }
-  
 .select-chevron {
     position: absolute;
     right: 0.5rem;
@@ -64,8 +61,25 @@ html, body, #root {
     opacity: 0.7;
     fill: var(--fg-default);
 }
-  
 .themed-select option {
     background: var(--panel-bg);
     color: var(--fg-default);
+}
+
+/* Vertical resize handle between main area and sidebar */
+.resize-handle {
+    width: 8px;
+    cursor: col-resize;
+    position: relative;
+    user-select: none;
+}
+.resize-handle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+.resize-handle:hover::before {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 4px;
 }

@@ -37,16 +37,42 @@ type Props = {
 
 export default function Canvas({ state }: Props) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-  const themeVersion = useThemeVersion(); // NEW: triggers redraw on theme change
+  const themeVersion = useThemeVersion();
+  const [size, setSize] = React.useState<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
 
-  React.useEffect(() => {
+  // Track canvas element size so redraws happen when the sidebar resizes.
+  React.useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+
+      setSize((prev) => {
+        const roundedWidth = Math.round(width);
+        const roundedHeight = Math.round(height);
+        if (prev.width === roundedWidth && prev.height === roundedHeight) return prev;
+        return { width: roundedWidth, height: roundedHeight };
+      });
+    });
+
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, []);
+
+  React.useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     // Handle high-DPI (retina) rendering for crisp text and lines.
     const dpr = window.devicePixelRatio || 1;
-    const cssWidth = canvas.clientWidth || 640;
-    const cssHeight = canvas.clientHeight || 280;
+    const cssWidth = size.width || canvas.clientWidth || 640;
+    const cssHeight = size.height || canvas.clientHeight || 280;
 
     // Allocate the backing store with DPR
     canvas.width = Math.floor(cssWidth * dpr);
@@ -59,7 +85,7 @@ export default function Canvas({ state }: Props) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     drawArrayCanvas(ctx, cssWidth, cssHeight, state);
-  }, [state, themeVersion]); // NEW: redraw when theme changes
+  }, [state, themeVersion, size]); 
 
   return (
     <div className="theme-panel p-2">

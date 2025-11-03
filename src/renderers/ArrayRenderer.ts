@@ -1,5 +1,5 @@
 import type { IVisualRenderer } from "@renderers";
-import type { VisualOperation } from "@operations";
+import type { ArrayOperation, VisualOperation } from "@operations";
 import type { ArrayVisualizationState } from "@types";
 import { Operation } from "@operations";
 
@@ -14,7 +14,7 @@ export class ArrayRenderer implements IVisualRenderer<ArrayVisualizationState> {
       focus: initial.focus ? { ...initial.focus } : undefined,
     };
 
-    for (const operation of operations) {
+    for (const operation of operations as ArrayOperation[]) {
       switch (operation.operation) {
         case Operation.ArrayCompare:
           state.focus = { i1: operation.i, i2: operation.j };
@@ -27,9 +27,6 @@ export class ArrayRenderer implements IVisualRenderer<ArrayVisualizationState> {
           state.values[j] = temp;
           state.focus = { i1: i, i2: j };
           break;
-        default:
-          // Ignore operations from other domains (tree, graph, etc.)
-          break;
       }
     }
 
@@ -37,7 +34,7 @@ export class ArrayRenderer implements IVisualRenderer<ArrayVisualizationState> {
   }
 
   validate?(operations: VisualOperation[]): void {
-    for (const operation of operations) {
+    for (const operation of operations as ArrayOperation[]) {
       if (
         operation.operation === Operation.ArrayCompare ||
         operation.operation === Operation.ArraySwap

@@ -2,17 +2,20 @@ import React from "react";
 import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
 import Canvas from "./components/Canvas";
+import TreeCanvas from "./components/TreeCanvas";
 import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
 import { useStepRunner } from "./hooks/useStepRunner";
 import { LanguageCatalog, type LanguageType } from "./types/languages";
 import type { StepSequence } from "./types/step";
 import type { ArrayVisualizationState } from "./types/visual";
+import type { TreeVisualizationState } from "./types/tree";
 import { runner } from "./engine/bootstrap";
-import { Structure } from "@structures";
+import { Structure, type StructureType } from "@structures";
 import { AlgorithmCatalog, type AlgorithmType } from "@algorithms";
 import type { Snippet } from "@snippet";
 import { useTheme } from "@hooks";
+import type { AlgorithmInput } from "@inputs";
 
 // NEW: resizable sidebar hook (local, minimal)
 function useResizableSidebar(options?: {
@@ -84,11 +87,12 @@ function useResizableSidebar(options?: {
 export default function App() {
   const [algorithm, setAlgorithm] = React.useState<AlgorithmType>(AlgorithmCatalog.default);
   const [language, setLanguage] = React.useState<LanguageType>(LanguageCatalog.default);
+  const [structure, setStructure] = React.useState<StructureType>(Structure.Array); //TODO: melhorar esse default
   const [theme, toggleTheme] = useTheme();
 
   // Base values for the algorithm visualization (random, created once on mount).
-  const [baseValues, setBaseValues] = React.useState<number[]>(() =>
-    runner.generateInput<number[]>(AlgorithmCatalog.default)
+  const [baseValues, setBaseValues] = React.useState<AlgorithmInput>(() =>
+    runner.generateInput<AlgorithmInput>(AlgorithmCatalog.default)
   );
 
   // Steps produced by the engine (tracer) for the current baseValues and language.
@@ -99,14 +103,15 @@ export default function App() {
 
   // Rebuild snippet + steps whenever inputs change
   React.useEffect(() => {
+    const result = runner.buildTrace(algorithm, language, baseValues as any)
     setSnippet(runner.getSnippet(algorithm, language));
-    setSteps(runner.buildTrace(algorithm, language, baseValues));
+    setStructure(result.structure);
+    setSteps(result.steps);
   }, [algorithm, language, baseValues]);
 
   // When algorithm changes, regenerate input from engine
   React.useEffect(() => {
-    const generated = runner.generateInput<number[]>(algorithm);
-    if (Array.isArray(generated)) setBaseValues(generated);
+    setBaseValues(runner.generateInput<AlgorithmInput>(algorithm));
   }, [algorithm]);
 
   // Playback engine (index, play/pause, step, prev, reset, speed).
@@ -118,19 +123,19 @@ export default function App() {
     : undefined;
 
   // Visual state for the Canvas: reduce visual operations up to the current index.
-  const visualState: ArrayVisualizationState = React.useMemo(() => {
-    const initialVisual: ArrayVisualizationState = { values: baseValues };
-    return runner.computeVisualState<ArrayVisualizationState>(
-      Structure.Array,
-      initialVisual,
-      steps,
-      stepRunner.index
-    );
-  }, [baseValues, steps, stepRunner.index]);
+  const visualState = React.useMemo(() => {
+    if (structure === Structure.Array) {
+      const initial: ArrayVisualizationState = { values: baseValues as number[] };
+      return runner.computeVisualState(Structure.Array, initial, steps, stepRunner.index);
+    } else {
+      const initial: TreeVisualizationState = { root: (baseValues as any).root ?? null, compareKey: (baseValues as any).key };
+      return runner.computeVisualState(Structure.BST, initial, steps, stepRunner.index);
+    }
+  }, [baseValues, steps, stepRunner.index, structure]);
 
   const handleRandomize = React.useCallback(() => {
     stepRunner.reset();
-    setBaseValues(runner.generateInput<number[]>(algorithm));
+    setBaseValues(runner.generateInput<AlgorithmInput>(algorithm));
   }, [algorithm, stepRunner]);
 
   // Responsive enable: only allow resize on wide viewports (>= 1024px)
@@ -179,7 +184,9 @@ export default function App() {
 
           <StepInfo index={stepRunner.index} total={steps.length} note={stepRunner.current?.note ?? null} />
 
-          <Canvas state={visualState} />
+          {structure === Structure.Array? <Canvas state={visualState as ArrayVisualizationState} />
+            : <TreeCanvas state={visualState as TreeVisualizationState} />
+          }
         </section>
 
         {/* Handle + Sidebar on wide screens */}

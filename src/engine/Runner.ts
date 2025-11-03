@@ -35,7 +35,7 @@ export class Runner {
    * Produce a full trace for a given algorithm+language combo using the provided input.
    * The tracer emits steps; language adapter can later refine line ranges.
    */
-  buildTrace<T>(algorithm: AlgorithmType, language: LanguageType, input: T): StepSequence {
+  buildTrace<T>(algorithm: AlgorithmType, language: LanguageType, input: T): { structure: StructureType, steps: StepSequence } {
     const tracer = this.tracers.get<T>(tracerKey(algorithm, language));
     const snippet = this.snippets.get(snippetKey(algorithm, language));
 
@@ -46,7 +46,10 @@ export class Runner {
     //    At this commit, we assume steps already carry { lineStart, lineEnd }.
     const mappedSteps: StepSequence = rawSteps.map((step: Step) => step);
 
-    return mappedSteps;
+    return {
+      structure: tracer.structure,
+      steps: mappedSteps
+    };
   }
 
   /**

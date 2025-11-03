@@ -1,0 +1,14 @@
+function bstSearch(root: Node | null, key: number): boolean {
+  let curr = root
+  while (curr) {
+    if (key === curr.value) {
+      return true
+    }
+    if (key < curr.value) {
+      curr = curr.left
+    } else {
+      curr = curr.right
+    }
+  }
+  return false
+}

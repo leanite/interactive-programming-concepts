@@ -4,6 +4,8 @@
     --fg-default: #e5e7eb;          /* neutral-200 */
     --panel-bg: #111827;            /* neutral-900-ish */
     --panel-border: #1f2937;        /* neutral-800 */
+    --tree-edge: rgba(148, 163, 184, 0.45); /* slate-400 @45% */
+    --tree-node-text: #111827;      /* deep slate */
     --muted: rgba(229, 231, 235, 0.7);
     --accent: #60a5fa;              /* blue-400 */
 }
@@ -13,6 +15,8 @@
     --fg-default: #0b0f19;          /* near-black */
     --panel-bg: #f9fafb;            /* gray-50 */
     --panel-border: #e5e7eb;        /* gray-200 */
+    --tree-edge: rgba(100, 116, 139, 0.55); /* slate-500 @55% */
+    --tree-node-text: #f8fafc;      /* almost white */
     --muted: #6b7280;               /* gray-500 */
     --accent: #2563eb;              /* blue-600 */
 }

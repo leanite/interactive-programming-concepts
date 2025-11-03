@@ -41,7 +41,7 @@ export class BubbleSortArrayTracer implements IAlgorithmTracer<number[]> {
       for (let j = 0; j < array.length - i - 1; j++) {
         stepBuilder.add(
           snippetLanguageRange.innerLoop,
-          `Compare indices ${j} and ${j + 1}`,
+          `Compare indexes ${j} and ${j + 1}`,
           [{ operation: Operation.ArrayCompare, i: j, j: j + 1 }]
         );
 

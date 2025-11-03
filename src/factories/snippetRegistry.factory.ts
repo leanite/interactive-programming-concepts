@@ -4,19 +4,21 @@ import { formatUniqueKey } from "@keys";
 import { Algorithm } from "@algorithms";
 import { Language } from "@languages";
 import { Snippet } from "@snippet";
-import { bubbleSortTypeScriptRanges } from "@snippets-file";
+import { bubbleSortPythonRanges, bubbleSortTypeScriptRanges, selectionSortTypeScriptRanges } from "@snippets-file";
 
-// Raw .txt snippets organized by language folder:
-import bubbleSortTypescriptSnippetText from "@snippets-dir/typescript/bubble-sort.txt?raw";
-import selectionSortTypescriptSnippetText from "@snippets-dir/typescript/selection-sort.txt?raw";
-
-import { selectionSortTypeScriptRanges } from "@tracers";
+// Raw .txt snippets organized by algorithm folder:
+import bubbleSortTypescriptSnippetText from "@snippets-dir/bubble-sort/bubble-sort.typescript.txt?raw";
+import bubbleSortPythonSnippetText from "@snippets-dir/bubble-sort/bubble-sort.python.txt?raw";
+import selectionSortTypescriptSnippetText from "@snippets-dir/selection-sort/selection-sort.typescript.txt?raw";
 
 export function buildSnippetRegistry(): SnippetRegistry {
     const snippetRegistry = new SnippetRegistry();
 
     snippetRegistry.register(formatUniqueKey(Algorithm.BubbleSort, Language.TypeScript), 
         new Snippet(Algorithm.BubbleSort, Language.TypeScript, bubbleSortTypescriptSnippetText, bubbleSortTypeScriptRanges));
+
+    snippetRegistry.register(formatUniqueKey(Algorithm.BubbleSort, Language.Python), 
+        new Snippet(Algorithm.BubbleSort, Language.Python, bubbleSortPythonSnippetText, bubbleSortPythonRanges));
     
     snippetRegistry.register(formatUniqueKey(Algorithm.SelectionSort, Language.TypeScript), 
         new Snippet(Algorithm.SelectionSort, Language.TypeScript, selectionSortTypescriptSnippetText, selectionSortTypeScriptRanges));

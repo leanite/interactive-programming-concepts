@@ -12,3 +12,12 @@ export const bubbleSortTypeScriptRanges: BubbleSortCodeRange = {
   swapBlock: { lineStart: 5, lineEnd: 7 },
   returnStmt: { lineStart: 12 },
 };
+
+export const bubbleSortPythonRanges: BubbleSortCodeRange = {
+  signature: { lineStart: 1 },
+  outerLoop: { lineStart: 4 },
+  innerLoop: { lineStart: 5 },
+  compare:   { lineStart: 6 },
+  swapBlock: { lineStart: 7, lineEnd: 9 },
+  returnStmt:{ lineStart: 10 },
+} as const;

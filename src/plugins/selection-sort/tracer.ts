@@ -16,24 +16,24 @@ export type SelectionSortCodeRange = SnippetRange & {
 };
 
 export class SelectionSortArrayTracer implements IAlgorithmTracer<number[]> {
-    readonly algorithm = Algorithm.BubbleSort;
+    readonly algorithm = Algorithm.SelectionSort; // FIX: estava Algorithm.BubbleSort
     readonly id: TracerKey;
     readonly structure = Structure.Array;
 
     constructor(language: LanguageType) {
         this.id = tracerKey(this.algorithm, language);
     }
-  
+
     buildTrace(input: number[], snippetLanguageRange: SelectionSortCodeRange): StepSequence {
     const array = [... input];
     const stepBuilder = new VisualStepBuilder();
-  
+
     stepBuilder.add(snippetLanguageRange.signature, "Initialize Selection Sort");
-  
+
       for (let i = 0; i < array.length - 1; i++) {
         let min = i;
         stepBuilder.add(snippetLanguageRange.outerLoop, `Outer loop i = ${i}`);
-  
+
         for (let j = i + 1; j < array.length; j++) {
           // compare current j with current min
           stepBuilder.add(
@@ -47,13 +47,13 @@ export class SelectionSortArrayTracer implements IAlgorithmTracer<number[]> {
             stepBuilder.add(snippetLanguageRange.compare, `Update min → ${min}`);
           }
         }
-  
+
         if (min !== i) {
           // swap a[i] and a[min]
           const tmp = array[i];
           array[i] = array[min];
           array[min] = tmp;
-  
+
           stepBuilder.add(
             snippetLanguageRange.swapBlock,
             `Swap i = ${i} with min = ${min}`,
@@ -61,7 +61,7 @@ export class SelectionSortArrayTracer implements IAlgorithmTracer<number[]> {
           );
         }
       }
-  
+
       stepBuilder.add(snippetLanguageRange.returnStmt, "Return sorted array");
       return stepBuilder.build();
     }

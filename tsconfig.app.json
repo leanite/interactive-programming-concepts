@@ -20,13 +20,12 @@
       "@snippet": ["types/snippet.ts"],
       "@engines": ["engine/index.ts"],
       "@hooks": ["hooks/index.ts"],
-      "@factories": ["factories/index.ts"],
+      "@builders": ["builders/index.ts"],
       "@registries": ["registries/index.ts"],
       "@renderers": ["renderers/index.ts"],
       "@inputs": ["inputs/index.ts"],
       "@tracers": ["tracers/index.ts"],
-      "@snippets-file": ["snippets/index.ts"],
-      "@snippets-dir": ["snippets"],
+      "@plugins/*": ["plugins/*"],
     },
 
     /* Bundler mode */

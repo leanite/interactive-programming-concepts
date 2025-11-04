@@ -1,10 +1,10 @@
-import type { BubbleSortCodeRange } from "@tracers";
+import type { BubbleSortCodeRange } from "../tracer";
 
 /**
  * Code line ranges for Bubble Sort in TypeScript snippet.
- * Keep these in sync with: src/snippets/typescript/bubble-sort.txt
+ * Keep these in sync with: src/plugins/bubble-sort/snippets/typescript.txt
  */
-export const bubbleSortTypeScriptRanges: BubbleSortCodeRange = {
+export const typescriptRanges: BubbleSortCodeRange = {
   signature: { lineStart: 1 },
   outerLoop: { lineStart: 2 },
   innerLoop: { lineStart: 3 },
@@ -13,7 +13,11 @@ export const bubbleSortTypeScriptRanges: BubbleSortCodeRange = {
   returnStmt: { lineStart: 12 },
 };
 
-export const bubbleSortPythonRanges: BubbleSortCodeRange = {
+/**
+ * Code line ranges for Bubble Sort in Python snippet.
+ * Keep these in sync with: src/plugins/bubble-sort/snippets/python.txt
+ */
+export const pythonRanges: BubbleSortCodeRange = {
   signature: { lineStart: 1 },
   outerLoop: { lineStart: 4 },
   innerLoop: { lineStart: 5 },

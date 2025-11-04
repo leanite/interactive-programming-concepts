@@ -22,7 +22,7 @@ export class BSTSearchTracer implements IAlgorithmTracer<{ root: TreeNode | null
   readonly algorithm = Algorithm.BSTSearch;
   readonly id: TracerKey;
   readonly structure = Structure.BST;
-  
+
   constructor(language: LanguageType) {
     this.id = tracerKey(this.algorithm, language);
   }

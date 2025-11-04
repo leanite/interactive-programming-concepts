@@ -9,4 +9,4 @@ export function bubbleSort(a: number[]): number[] {
     }
   }
   return a;
-}          
+}

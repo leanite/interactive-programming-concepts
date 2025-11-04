@@ -1,3 +1,5 @@
+import type { TreeNode } from "./data";
+
 export type Focus = {
     i1: number;      // index of the primary focused bar
     i2?: number;     // optional secondary (e.g., adjacent compare)
@@ -16,3 +18,12 @@ export type ArrayVisualizationState = {
     /** Optional focused indices (e.g., compare or swap pairs). */
     focus?: { i1: number; i2?: number };
 };
+
+// Visual state for tree renderers.
+// The canvas reads this to draw trees and highlight focused nodes.
+export interface TreeVisualizationState {
+    root: TreeNode | null;
+    focusId?: string;        // current node being visited
+    compareKey?: number;     // key we're searching
+    pathIds?: string[];      // path from root to current
+}

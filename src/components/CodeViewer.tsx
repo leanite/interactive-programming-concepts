@@ -27,8 +27,24 @@ export default function CodeViewer({ snippet, highlight }: Props) {
     return Prism.languages[snippet.language] ?? Prism.languages.typescript;
   }, [snippet.language]);
 
-  const codeText = snippet.text ?? "";
-  const lines = useMemo(() => codeText.split("\n"), [codeText]);
+  // Normalize line endings and split into lines
+  const lines = useMemo(() => {
+    const codeText = snippet.text ?? "";
+
+    // Guard against empty or undefined text
+    if (!codeText || codeText.length === 0) {
+      return [""];
+    }
+
+    // Normalize line endings: handle \r\n (Windows) and \r (old Mac)
+    const normalized = codeText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+    // Split by newline
+    const split = normalized.split("\n");
+
+    // Guard against empty split result
+    return split.length > 0 ? split : [""];
+  }, [snippet.text]);
 
   const start = highlight?.start ?? -1;
   const end = highlight?.end ?? start;

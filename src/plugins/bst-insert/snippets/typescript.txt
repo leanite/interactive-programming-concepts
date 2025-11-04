@@ -1,0 +1,13 @@
+export function bstInsert(root: TreeNode | null, value: number): TreeNode {
+  if (root === null) {
+    return new TreeNode(value);
+  }
+
+  if (value < root.value) {
+    root.left = bstInsert(root.left, value);
+  } else if (value > root.value) {
+    root.right = bstInsert(root.right, value);
+  }
+
+  return root;
+}

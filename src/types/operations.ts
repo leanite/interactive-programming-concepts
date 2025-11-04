@@ -6,11 +6,16 @@ export const Operation = {
     // Array operations
     ArrayCompare: "array/compare",
     ArraySwap: "array/swap",
-  
+
+    // BST traversal operations
     BSTVisit: "bst/visit",
     BSTCompare: "bst/compare",
     BSTMoveLeft: "bst/move-left",
     BSTMoveRight: "bst/move-right",
+
+    // BST mutation operations
+    BSTCreateNode: "bst/create-node",
+    BSTAttachNode: "bst/attach-node",
   } as const;
   
 // Derived type for all operation kind string literals
@@ -27,7 +32,9 @@ export type TreeOperation =
   | { operation: typeof Operation.BSTVisit; nodeId: string }
   | { operation: typeof Operation.BSTCompare; nodeId: string; key: number }
   | { operation: typeof Operation.BSTMoveLeft; fromId: string; toId: string }
-  | { operation: typeof Operation.BSTMoveRight; fromId: string; toId: string };
+  | { operation: typeof Operation.BSTMoveRight; fromId: string; toId: string }
+  | { operation: typeof Operation.BSTCreateNode; nodeId: string; value: number }
+  | { operation: typeof Operation.BSTAttachNode; parentId: string; newNodeId: string; side: "left" | "right" };
 
 // Future: extend VisualOperation with tree and graph operations.
 export type VisualOperation = ArrayOperation | TreeOperation;

@@ -10,7 +10,12 @@ function createBST(values: number[]): TreeNode | null {
   let root: TreeNode | null = null;
   let nextId = 1;
 
-  const makeNode = (v: number): TreeNode => ({ id: `n${nextId++}`, value: v });
+  const makeNode = (v: number): TreeNode => ({
+    id: `n${nextId++}`,
+    value: v,
+    left: null,
+    right: null,
+  });
 
   function insert(node: TreeNode | null, v: number): TreeNode {
     if (!node) return makeNode(v);

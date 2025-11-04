@@ -6,6 +6,6 @@
 export interface TreeNode {
   id: string; // unique id (e.g., "n42")
   value: number;
-  left?: TreeNode;
-  right?: TreeNode;
+  left: TreeNode | null;
+  right: TreeNode | null;
 }

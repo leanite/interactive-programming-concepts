@@ -30,6 +30,7 @@ import { Snippet } from "@snippet";
 import bubbleSortPlugin from "@plugins/bubble-sort/manifest";
 import selectionSortPlugin from "@plugins/selection-sort/manifest";
 import bstSearchPlugin from "@plugins/bst-search/manifest";
+import bstInsertPlugin from "@plugins/bst-insert/manifest";
 
 /**
  * List of all available plugins.
@@ -40,6 +41,7 @@ const PLUGIN_MANIFESTS: PluginManifest[] = [
   bubbleSortPlugin,
   selectionSortPlugin,
   bstSearchPlugin,
+  bstInsertPlugin,
 ];
 
 // ===========================================================================

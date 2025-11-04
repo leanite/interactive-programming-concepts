@@ -93,6 +93,16 @@ export default function TreeCanvas({ state, width = 640, height = 360 }: Props) 
   const themeVersion = useThemeVersion();
   const [size, setSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
 
+  // Pan/drag state
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  // Zoom state
+  const [scale, setScale] = useState(1);
+  const MIN_SCALE = 0.3;
+  const MAX_SCALE = 3;
+
   // Track canvas element size for responsive rendering
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -115,6 +125,62 @@ export default function TreeCanvas({ state, width = 640, height = 360 }: Props) 
     return () => observer.disconnect();
   }, []);
 
+  // Reset offset and scale when tree changes
+  useEffect(() => {
+    setOffset({ x: 0, y: 0 });
+    setScale(1);
+  }, [state.root]);
+
+  // Mouse event handlers for panning
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging) return;
+    setOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Wheel handler for zoom
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Get mouse position relative to canvas
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Calculate zoom delta (negative deltaY = zoom in)
+    const zoomIntensity = 0.002;
+    const delta = -e.deltaY * zoomIntensity;
+    const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+
+    if (newScale === scale) return; // No change
+
+    // Zoom towards mouse position
+    const scaleRatio = newScale / scale;
+    const newOffsetX = mouseX - (mouseX - offset.x) * scaleRatio;
+    const newOffsetY = mouseY - (mouseY - offset.y) * scaleRatio;
+
+    setScale(newScale);
+    setOffset({ x: newOffsetX, y: newOffsetY });
+  };
+
   // Main rendering effect
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
@@ -133,12 +199,24 @@ export default function TreeCanvas({ state, width = 640, height = 360 }: Props) 
     // Scale so that all drawing uses CSS pixels
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    drawTreeCanvas(ctx, cssWidth, cssHeight, state);
-  }, [state, size, width, height, themeVersion]);
+    drawTreeCanvas(ctx, cssWidth, cssHeight, state, offset, scale);
+  }, [state, size, width, height, themeVersion, offset, scale]);
 
   return (
     <div className="theme-panel p-2">
-      <canvas ref={canvasRef} style={{ width: "100%", height }} />
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "100%",
+          height,
+          cursor: isDragging ? "grabbing" : "grab",
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+        onWheel={handleWheel}
+      />
     </div>
   );
 }
@@ -474,7 +552,9 @@ function drawTreeCanvas(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  state: TreeVisualizationState
+  state: TreeVisualizationState,
+  offset: { x: number; y: number } = { x: 0, y: 0 },
+  scale: number = 1
 ) {
   // Clear canvas
   ctx.clearRect(0, 0, width, height);
@@ -490,6 +570,11 @@ function drawTreeCanvas(
 
   // Build path edges for highlighting
   const pathEdges = CONFIG.pathHighlightEnabled ? buildPathEdges(state.pathIds) : new Set<string>();
+
+  // Apply pan offset and zoom scale to all drawing operations
+  ctx.save();
+  ctx.translate(offset.x, offset.y);
+  ctx.scale(scale, scale);
 
   // Draw edges first (so they appear behind nodes)
   for (const node of nodes) {
@@ -516,6 +601,8 @@ function drawTreeCanvas(
     drawNode(ctx, node.x, node.y, isFocused, colors);
     drawNodeLabel(ctx, node.value, node.x, node.y, colors.nodeText);
   }
+
+  ctx.restore();
 
   // Draw search key label if present
   if (typeof state.compareKey === "number") {

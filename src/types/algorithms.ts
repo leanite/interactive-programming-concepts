@@ -4,6 +4,7 @@ export const Algorithm = {
     SelectionSort: "selection-sort",
     BSTSearch: "bst-search",
     BSTInsert: "bst-insert",
+    BSTDelete: "bst-delete",
 } as const;
   
 export type AlgorithmType = (typeof Algorithm)[keyof typeof Algorithm];
@@ -17,6 +18,7 @@ export class AlgorithmCatalog {
         [Algorithm.SelectionSort] : { name: "Selection Sort"},
         [Algorithm.BSTSearch]: { name: "BST Search" },
         [Algorithm.BSTInsert]: { name: "BST Insert" },
+        [Algorithm.BSTDelete]: { name: "BST Delete" },
     }
 
     static label(id: AlgorithmType): string {

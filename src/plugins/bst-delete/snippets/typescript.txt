@@ -1,0 +1,32 @@
+function bstDelete(root: TreeNode | null, value: number): TreeNode | null {
+  if (root === null) {
+    return null;
+  }
+
+  if (value < root.value) {
+    root.left = bstDelete(root.left, value);
+  } else if (value > root.value) {
+    root.right = bstDelete(root.right, value);
+  } else { // Node found: handle 3 cases
+    // Case 1: Leaf node
+    if (root.left === null && root.right === null) {
+      return null;
+    }
+    // Case 2: One child
+    if (root.left === null) {
+      return root.right;
+    }
+    if (root.right === null) {
+      return root.left;
+    }
+    // Case 3: Two children - Find min in right subtree
+    let successor = root.right;
+    while (successor.left !== null) {
+      successor = successor.left;
+    }
+
+    root.value = successor.value;
+    root.right = bstDelete(root.right, successor.value);
+  }
+  return root;
+}

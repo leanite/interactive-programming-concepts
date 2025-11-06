@@ -231,6 +231,9 @@ interface ThemeColors {
   focus: string;
   focusDarker: string;
   focusBorder: string;
+  delete: string;
+  deleteDarker: string;
+  deleteBorder: string;
   edge: string;
   pathEdge: string;
   text: string;
@@ -247,6 +250,7 @@ function getThemeColors(): ThemeColors {
 
   const colorNode = styles.getPropertyValue("--muted").trim() || "#6b7280";
   const colorFocus = styles.getPropertyValue("--accent").trim() || "#60a5fa";
+  const colorDelete = styles.getPropertyValue("--delete").trim() || "#ef4444";
   const colorText = styles.getPropertyValue("--fg-default").trim() || "#e5e7eb";
   const colorNodeText = styles.getPropertyValue("--tree-node-text").trim() || colorText;
   const colorEdge = styles.getPropertyValue("--tree-edge").trim() || "#94a3b8";
@@ -258,6 +262,9 @@ function getThemeColors(): ThemeColors {
     focus: colorFocus,
     focusDarker: darkenColor(colorFocus, 0.25),
     focusBorder: lightenColor(colorFocus, 0.15),
+    delete: colorDelete,
+    deleteDarker: darkenColor(colorDelete, 0.25),
+    deleteBorder: lightenColor(colorDelete, 0.15),
     edge: colorEdge,
     pathEdge: colorFocus,
     text: colorText,
@@ -460,6 +467,7 @@ function drawNode(
   x: number,
   y: number,
   isFocused: boolean,
+  isMarkedForDelete: boolean,
   colors: ThemeColors
 ) {
   const radius = CONFIG.nodeRadius;
@@ -483,7 +491,10 @@ function drawNode(
       radius
     );
 
-    if (isFocused) {
+    if (isMarkedForDelete) {
+      gradient.addColorStop(0, colors.delete);
+      gradient.addColorStop(1, colors.deleteDarker);
+    } else if (isFocused) {
       gradient.addColorStop(0, colors.focus);
       gradient.addColorStop(1, colors.focusDarker);
     } else {
@@ -492,7 +503,7 @@ function drawNode(
     }
     ctx.fillStyle = gradient;
   } else {
-    ctx.fillStyle = isFocused ? colors.focus : colors.node;
+    ctx.fillStyle = isMarkedForDelete ? colors.delete : (isFocused ? colors.focus : colors.node);
   }
 
   // Draw filled circle
@@ -505,7 +516,7 @@ function drawNode(
   }
 
   // Draw border
-  ctx.strokeStyle = isFocused ? colors.focusBorder : colors.nodeBorder;
+  ctx.strokeStyle = isMarkedForDelete ? colors.deleteBorder : (isFocused ? colors.focusBorder : colors.nodeBorder);
   ctx.lineWidth = CONFIG.nodeBorderWidth;
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -598,7 +609,8 @@ function drawTreeCanvas(
   // Draw nodes on top of edges
   for (const node of nodes) {
     const isFocused = state.focusId === node.id;
-    drawNode(ctx, node.x, node.y, isFocused, colors);
+    const isMarkedForDelete = state.deleteNodeId === node.id;
+    drawNode(ctx, node.x, node.y, isFocused, isMarkedForDelete, colors);
     drawNodeLabel(ctx, node.value, node.x, node.y, colors.nodeText);
   }
 

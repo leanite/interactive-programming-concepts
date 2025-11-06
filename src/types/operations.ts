@@ -16,6 +16,9 @@ export const Operation = {
     // BST mutation operations
     BSTCreateNode: "bst/create-node",
     BSTAttachNode: "bst/attach-node",
+    BSTDetachNode: "bst/detach-node",
+    BSTReplaceNode: "bst/replace-node",
+    BSTMarkDelete: "bst/mark-delete",
   } as const;
   
 // Derived type for all operation kind string literals
@@ -34,7 +37,10 @@ export type TreeOperation =
   | { operation: typeof Operation.BSTMoveLeft; fromId: string; toId: string }
   | { operation: typeof Operation.BSTMoveRight; fromId: string; toId: string }
   | { operation: typeof Operation.BSTCreateNode; nodeId: string; value: number }
-  | { operation: typeof Operation.BSTAttachNode; parentId: string; newNodeId: string; side: "left" | "right" };
+  | { operation: typeof Operation.BSTAttachNode; parentId: string; newNodeId: string; side: "left" | "right" }
+  | { operation: typeof Operation.BSTDetachNode; parentId: string; nodeId: string; side: "left" | "right" }
+  | { operation: typeof Operation.BSTReplaceNode; oldNodeId: string; newNodeId: string }
+  | { operation: typeof Operation.BSTMarkDelete; nodeId: string };
 
 // Future: extend VisualOperation with tree and graph operations.
 export type VisualOperation = ArrayOperation | TreeOperation;

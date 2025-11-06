@@ -23,7 +23,8 @@ export type ArrayVisualizationState = {
 // The canvas reads this to draw trees and highlight focused nodes.
 export interface TreeVisualizationState {
     root: TreeNode | null;
-    focusId?: string;        // current node being visited
+    focusId?: string ;        // current node being visited
     compareKey?: number;     // key we're searching
     pathIds?: string[];      // path from root to current
+    deleteNodeId?: string;   // node marked for deletion (rendered in red)
 }

@@ -19,6 +19,13 @@ export const Operation = {
     BSTDetachNode: "bst/detach-node",
     BSTReplaceNode: "bst/replace-node",
     BSTMarkDelete: "bst/mark-delete",
+
+    // Graph traversal operations
+    GraphVisit: "graph/visit",
+    GraphEnqueue: "graph/enqueue",
+    GraphDequeue: "graph/dequeue",
+    GraphExploreEdge: "graph/explore-edge",
+    GraphMarkVisited: "graph/mark-visited",
   } as const;
   
 // Derived type for all operation kind string literals
@@ -42,5 +49,11 @@ export type TreeOperation =
   | { operation: typeof Operation.BSTReplaceNode; oldNodeId: string; newNodeId: string }
   | { operation: typeof Operation.BSTMarkDelete; nodeId: string };
 
-// Future: extend VisualOperation with tree and graph operations.
-export type VisualOperation = ArrayOperation | TreeOperation;
+export type GraphOperation =
+  | { operation: typeof Operation.GraphVisit; nodeId: string }
+  | { operation: typeof Operation.GraphEnqueue; nodeId: string }
+  | { operation: typeof Operation.GraphDequeue; nodeId: string }
+  | { operation: typeof Operation.GraphExploreEdge; fromId: string; toId: string }
+  | { operation: typeof Operation.GraphMarkVisited; nodeId: string };
+
+export type VisualOperation = ArrayOperation | TreeOperation | GraphOperation;

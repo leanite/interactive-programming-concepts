@@ -1,7 +1,7 @@
 import type { StructureType } from "@structures";
 import type { IVisualRenderer } from "../renderers/IVisualRenderer";
 import { Structure } from "@structures";
-import { ArrayRenderer, TreeRenderer } from "@renderers";
+import { ArrayRenderer, TreeRenderer, GraphRenderer } from "@renderers";
 
 /** Stores visual renderers keyed by structure kind (e.g., "array", "tree"). */
 export class RendererRegistry {
@@ -53,8 +53,8 @@ export class RendererRegistry {
     // Renderer for binary trees (BST, AVL, heap, etc)
     registry.register(Structure.BST, new TreeRenderer());
 
-    // TODO: Add GraphRenderer when implementing graph algorithms
-    // registry.register(Structure.Graph, new GraphRenderer());
+    // Renderer for graph structures (BFS, DFS, Dijkstra, etc)
+    registry.register(Structure.Graph, new GraphRenderer());
 
     return registry;
   }

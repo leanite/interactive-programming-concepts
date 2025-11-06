@@ -2,6 +2,7 @@
 export const Structure = {
     Array: "array",
     BST: "bst",
+    Graph: "graph",
 } as const;
   
 export type StructureType = (typeof Structure)[keyof typeof Structure];

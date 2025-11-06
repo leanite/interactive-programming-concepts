@@ -1,4 +1,4 @@
-import type { TreeNode } from "./data";
+import type { TreeNode, Graph } from "./data";
 
 export type Focus = {
     i1: number;      // index of the primary focused bar
@@ -27,4 +27,14 @@ export interface TreeVisualizationState {
     compareKey?: number;     // key we're searching
     pathIds?: string[];      // path from root to current
     deleteNodeId?: string;   // node marked for deletion (rendered in red)
+}
+
+// Visual state for graph renderers.
+// The canvas reads this to draw graphs and highlight focused nodes/edges.
+export interface GraphVisualizationState {
+    graph: Graph;
+    visitedIds?: string[];    // nodes that have been visited (explored)
+    queueIds?: string[];      // nodes currently in the queue (frontier)
+    focusId?: string;         // current node being processed
+    exploredEdges?: Array<{from: string; to: string}>; // edges that have been explored
 }

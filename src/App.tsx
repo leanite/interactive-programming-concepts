@@ -3,12 +3,13 @@ import TopBar from "./components/TopBar";
 import Controls from "./components/Controls";
 import Canvas from "./components/Canvas";
 import TreeCanvas from "./components/TreeCanvas";
+import GraphCanvas from "./components/GraphCanvas";
 import CodePanel from "./components/CodePanel";
 import StepInfo from "./components/StepInfo";
 import { useStepRunner } from "./hooks/useStepRunner";
 import { LanguageCatalog, type LanguageType } from "./types/languages";
 import type { StepSequence } from "./types/step";
-import type { ArrayVisualizationState, TreeVisualizationState } from "./types/visual";
+import type { ArrayVisualizationState, TreeVisualizationState, GraphVisualizationState } from "./types/visual";
 import { runner } from "./engine/bootstrap";
 import { Structure, type StructureType } from "@structures";
 import { AlgorithmCatalog, type AlgorithmType } from "@algorithms";
@@ -100,18 +101,19 @@ export default function App() {
   // Snippet for the selected language and algorithm
   const [snippet, setSnippet] = React.useState<Snippet>(runner.getSnippet(algorithm, language));
 
+  // When algorithm changes, regenerate input from engine FIRST
+  React.useEffect(() => {
+    setBaseValues(runner.generateInput<AlgorithmInput>(algorithm));
+  }, [algorithm]);
+
   // Rebuild snippet + steps whenever inputs change
   React.useEffect(() => {
+    if (!baseValues) return;
     const result = runner.buildTrace(algorithm, language, baseValues as any)
     setSnippet(runner.getSnippet(algorithm, language));
     setStructure(result.structure);
     setSteps(result.steps);
   }, [algorithm, language, baseValues]);
-
-  // When algorithm changes, regenerate input from engine
-  React.useEffect(() => {
-    setBaseValues(runner.generateInput<AlgorithmInput>(algorithm));
-  }, [algorithm]);
 
   // Playback engine (index, play/pause, step, prev, reset, speed).
   const stepRunner = useStepRunner({ steps, initialIndex: 0, initialSpeedMs: 700 });
@@ -126,10 +128,14 @@ export default function App() {
     if (structure === Structure.Array) {
       const initial: ArrayVisualizationState = { values: baseValues as number[] };
       return runner.computeVisualState(Structure.Array, initial, steps, stepRunner.index);
-    } else {
+    } else if (structure === Structure.BST) {
       const initial: TreeVisualizationState = { root: (baseValues as any).root ?? null, compareKey: (baseValues as any).key };
       return runner.computeVisualState(Structure.BST, initial, steps, stepRunner.index);
+    } else if (structure === Structure.Graph) {
+      const initial: GraphVisualizationState = { graph: (baseValues as any).graph };
+      return runner.computeVisualState(Structure.Graph, initial, steps, stepRunner.index);
     }
+    return null;
   }, [baseValues, steps, stepRunner.index, structure]);
 
   const handleRandomize = React.useCallback(() => {
@@ -183,9 +189,13 @@ export default function App() {
 
           <StepInfo index={stepRunner.index} total={steps.length} note={stepRunner.current?.note ?? null} />
 
-          {structure === Structure.Array? <Canvas state={visualState as ArrayVisualizationState} />
-            : <TreeCanvas state={visualState as TreeVisualizationState} />
-          }
+          {structure === Structure.Array ? (
+            <Canvas state={visualState as ArrayVisualizationState} />
+          ) : structure === Structure.BST ? (
+            <TreeCanvas state={visualState as TreeVisualizationState} />
+          ) : structure === Structure.Graph ? (
+            <GraphCanvas state={visualState as GraphVisualizationState} />
+          ) : null}
         </section>
 
         {/* Handle + Sidebar on wide screens */}

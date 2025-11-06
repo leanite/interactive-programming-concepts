@@ -1,4 +1,4 @@
-export function bstInsert(root: TreeNode | null, value: number): TreeNode {
+function bstInsert(root: TreeNode | null, value: number): TreeNode {
   if (root === null) {
     return new TreeNode(value);
   }
